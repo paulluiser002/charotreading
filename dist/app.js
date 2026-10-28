@@ -1,3 +1,4 @@
+import { track } from './analytics.js';
 import { Deck } from './deck.js?v=20261028-3';
 import { motion } from './motion.js';
 
@@ -164,6 +165,7 @@ function renderHand() {
         if (deck.revealed.includes(id)) return;
         deck.reveal(id);
         save();
+        track('reveal_card', { card_count: deck.handSize, card_position: index + 1 });
         flip.dataset.revealed = 'true';
         flip.setAttribute('aria-pressed', 'true');
         flip.setAttribute('aria-label', `Card ${index + 1} revealed: ${card.alt}`);
@@ -217,6 +219,7 @@ async function draw() {
   // Save the complete hand before motion begins, so a refresh during the deal is safe.
   deck = draft;
   save();
+  track('draw_hand', { card_count: deck.handSize });
   $('card-loading').hidden = true;
   try {
     await motion.deal(deck.handSize);
@@ -238,13 +241,17 @@ $('hand-size').addEventListener('change', () => {
   render();
 });
 function openHand() {
-  if (!busy && deck?.hand.length) motion.open($('hand-dialog'));
+  if (!busy && deck?.hand.length && !$('hand-dialog').open) {
+    motion.open($('hand-dialog'));
+    track('open_hand', { card_count: deck.handSize });
+  }
 }
 $('hand-button').addEventListener('click', openHand);
 $('hand-fan').addEventListener('click', openHand);
 async function nextReading() {
   if (busy || !deck?.hand.length) return;
   setBusy(true);
+  track('next_reading', { card_count: deck.handSize });
   deck.nextReading();
   save();
   try {
@@ -303,7 +310,7 @@ $('reset-button').addEventListener('click', async () => {
 for (const [button, dialog] of [['help-button', 'help-dialog'], ['credits-button', 'credits-dialog'], ['hand-button', 'hand-dialog'], ['coffee-button', 'coffee-dialog']]) {
   const element = $(dialog);
   if (dialog !== 'hand-dialog') $(button).addEventListener('click', () => {
-    if (dialog === 'coffee-dialog') resetCoffee();
+    if (dialog === 'coffee-dialog') { resetCoffee(); track('open_support'); }
     motion.open(element);
   });
   element.querySelector('.dialog-close').addEventListener('click', () => motion.close(element));
@@ -331,6 +338,7 @@ for (const input of document.querySelectorAll('input[name="support-option"]')) {
   input.addEventListener('change', () => {
     $('coffee-donation').hidden = input.value !== 'coffee';
     $('coffee-hire').hidden = input.value !== 'hire';
+    if (input.value === 'hire') track('select_hire');
     resetCopy();
   });
 }
