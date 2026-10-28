@@ -18,7 +18,7 @@ The palette and original artwork remain authoritative. Controls are grouped into
 
 ## Brand, arrival and support
 
-The site identity is Charot Reading. A 2.6-second startup scene fans three original engraved backs in 3D, gathers them and dissolves into the table. A small independent timer releases the page even if deck loading fails. Reduced motion shows the page immediately. Two fine orbital line drawings drift slowly behind the paper; the footer can pause decorative motion, and loops pause in background tabs.
+The site identity is Charot Reading. A 2.6-second startup scene fans three original engraved backs in 3D, gathers them and dissolves into the table. A small independent timer releases the page even if deck loading fails. Reduced motion shows the page immediately. Two gold orbital line drawings drift slowly behind the paper, with stronger contrast and slightly heavier strokes so their motion stays visible; the footer can pause decorative motion, and loops pause in background tabs.
 
 The coffee support feature reuses One ODC’s original QR image, contact email, gold circular trigger, 3-second pulse, steam delays and cup wiggle. Its accessible dialog provides Buy me a coffee and Hire me, email copy feedback and a manual-copy fallback. Support resets to the coffee view each time it opens.
 

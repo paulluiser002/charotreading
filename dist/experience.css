@@ -311,9 +311,9 @@
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 body { isolation: isolate; }
 .ambient-background { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: -1; color: var(--gold); }
-.ambient-orbit { position: absolute; width: min(100vw,1050px); height: auto; opacity: .075; stroke-width: .7; }
-.orbit-one { top: -58%; left: -30%; animation: orbit-drift 70s linear infinite; }
-.orbit-two { bottom: -62%; right: -32%; animation: orbit-drift 95s linear infinite reverse; }
+.ambient-orbit { position: absolute; width: min(100vw,1050px); height: auto; opacity: .19; stroke-width: 1.1; }
+.orbit-one { top: -38%; left: -22%; animation: orbit-drift 70s linear infinite; }
+.orbit-two { bottom: -46%; right: -25%; animation: orbit-drift 95s linear infinite reverse; }
 @keyframes orbit-drift { to { transform: rotate(360deg); } }
 .page-hidden .ambient-orbit, .page-hidden .coffee-trigger::before, .page-hidden .coffee-cup, .page-hidden .coffee-steam,
 .motion-paused .ambient-orbit, .motion-paused .coffee-trigger::before, .motion-paused .coffee-cup, .motion-paused .coffee-steam { animation-play-state: paused; }
@@ -336,7 +336,7 @@ body { isolation: isolate; }
 @keyframes startup-caption { 0%,14% { opacity: 0; } 32%,88% { opacity: 1; } 100% { opacity: 0; } }
 @keyframes startup-exit { to { opacity: 0; } }
 @media (max-width: 1050px) { .coffee-trigger { margin-left: auto; } .guide-button { margin-left: 0; } .site-header { gap: 20px; } }
-@media (max-width: 600px) { .site-header { gap: 10px; } .guide-button { width: 36px; min-width: 36px; padding: 0; border: 0; } .guide-button .guide-label { display: none; } .guide-button svg { width: 18px; height: 18px; } .orbit-one { width: 150vw; top: -15%; left: -65%; } .orbit-two { width: 150vw; bottom: -15%; right: -70%; } .site-footer { flex-wrap: wrap; gap: 4px 12px; } .footer-actions { flex-wrap: wrap; justify-content: flex-end; } .site-footer button { min-height: 40px; } }
+@media (max-width: 600px) { .site-header { gap: 10px; } .guide-button { width: 36px; min-width: 36px; padding: 0; border: 0; } .guide-button .guide-label { display: none; } .guide-button svg { width: 18px; height: 18px; } .orbit-one { width: 150vw; top: -9%; left: -48%; } .orbit-two { width: 150vw; bottom: -12%; right: -52%; } .site-footer { flex-wrap: wrap; gap: 4px 12px; } .footer-actions { flex-wrap: wrap; justify-content: flex-end; } .site-footer button { min-height: 40px; } }
 @media (max-width: 359px) { .wordmark { font-size: 21px; } .site-header { gap: 8px; } .coffee-trigger { margin-left: auto; } .site-footer { justify-content: center; } .footer-actions { justify-content: center; } }
 @media (prefers-reduced-motion: reduce) { .ambient-orbit { animation: none; } .is-entering .startup-scene { display: none; } .is-entering .site-header, .is-entering main, .is-entering .site-footer { visibility: visible; } }
 
