@@ -1,8 +1,8 @@
 import { Deck } from './deck.js';
+import { motion } from './motion.js';
 
 const $ = id => document.getElementById(id);
 const storageKey = 'charot-readings-deck-v1';
-const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 let cards = [];
 let byId = new Map();
 let deck;
@@ -11,11 +11,13 @@ let canSave = true;
 let nativeFullscreen = false;
 
 function setReadingFocus(enabled) {
+  const changed = document.body.classList.contains('reading-focus') !== enabled;
   document.body.classList.toggle('reading-focus', enabled);
   $('fullscreen-button').setAttribute('aria-pressed', String(enabled));
   $('fullscreen-button').setAttribute('aria-label', enabled ? 'Exit fullscreen' : 'Enter fullscreen');
   $('fullscreen-button').querySelector('span').textContent = enabled ? 'Exit fullscreen' : 'Fullscreen';
   if (enabled) window.scrollTo(0, 0);
+  if (changed) motion.pulse();
 }
 
 $('fullscreen-button').addEventListener('click', () => {
@@ -65,6 +67,8 @@ function status(message, error = false) {
 
 function setBusy(value, loading = false) {
   busy = value;
+  if (value) motion.resetTilt();
+  $('reading-controls').dataset.busy = String(value);
   $('deck-stage').setAttribute('aria-busy', String(value));
   $('draw-button').disabled = value || !deck || deck.hand.length > 0;
   $('shuffle-button').disabled = value || !deck || deck.remaining.length < 2;
@@ -74,13 +78,18 @@ function setBusy(value, loading = false) {
   $('hand-button').disabled = value || !deck || !deck.hand.length;
   $('next-reading-button').disabled = value || !deck || !deck.hand.length;
   $('dialog-next-reading').disabled = value || !deck || !deck.hand.length;
+  $('hand-fan').disabled = value || !deck || deck.hand.length < 2;
   $('card-loading').hidden = !loading;
 }
 
 function render() {
   const current = byId.get(deck.current);
-  $('card-back').hidden = Boolean(current);
-  $('card-front').hidden = !current;
+  $('card').dataset.face = current ? 'front' : 'back';
+  $('card-back').setAttribute('aria-hidden', String(Boolean(current)));
+  $('card-front').setAttribute('aria-hidden', String(!current));
+  $('reading-controls').dataset.state = deck.hand.length ? 'held' : 'empty';
+  $('reading-controls').dataset.size = String(deck.handSize);
+  motion.scene(deck.hand.length);
   $('pin-link').hidden = !current;
   if (current) {
     const image = $('card-image');
@@ -98,7 +107,7 @@ function render() {
   $('hand-button').setAttribute('aria-label', `Cards in hand (${deck.hand.length})`);
   $('hand-description').textContent = deck.hand.length
     ? 'Your cards are held until you select Next reading.'
-    : 'Draw your hand before opening it for interpretation.';
+    : 'Choose your cards, then draw to begin.';
   renderHand();
   if (!deck.hand.length && $('hand-dialog').open) $('hand-dialog').close();
 }
@@ -128,11 +137,6 @@ function renderHand() {
   $('hand-summary').textContent = `${deck.hand.length} ${deck.hand.length === 1 ? 'card' : 'cards'}, held together for your interpretation.`;
 }
 
-async function animate(frames, duration = 240) {
-  if (reducedMotion.matches) return;
-  await $('card').animate(frames, { duration, easing: 'cubic-bezier(.2,.7,.25,1)' }).finished.catch(() => {});
-}
-
 function loadImage(src) {
   return new Promise((resolve, reject) => {
     const image = new Image();
@@ -142,7 +146,7 @@ function loadImage(src) {
       image.onload = image.onerror = null;
       if (error) reject(error); else resolve();
     }
-    image.onload = () => finish();
+    image.onload = () => image.decode().then(() => finish(), () => finish(new Error('Image could not be decoded.')));
     image.onerror = () => finish(new Error('Image unavailable.'));
     image.src = src;
   });
@@ -157,16 +161,23 @@ async function draw() {
   status(deck.handSize === 1 ? 'Drawing your card…' : `Drawing your ${deck.handSize}-card hand…`);
   try {
     await Promise.all(result.ids.map(id => loadImage(byId.get(id).image)));
-    await animate([{ transform: 'rotate(0)', opacity: 1 }, { transform: 'translateY(-9px) rotate(-4deg) scale(.97)', opacity: 0 }], 140);
-    deck = draft;
-    save();
-    render();
-    $('card-loading').hidden = true;
-    await animate([{ transform: 'rotateY(-65deg) rotate(-3deg)', opacity: 0 }, { transform: 'rotateY(0) rotate(0)', opacity: 1 }], 340);
-    status(!canSave ? 'Hand drawn. Progress can’t be saved in this browser.' : 'Your hand is ready. Open Cards in hand to begin your interpretation.');
   } catch {
     status('Your hand couldn’t load. No cards were used. Try drawing again.', true);
+    setBusy(false);
+    return;
+  }
+  // Save the complete hand before motion begins, so a refresh during the deal is safe.
+  deck = draft;
+  save();
+  $('card-loading').hidden = true;
+  try {
+    await motion.deal(deck.handSize);
+    render();
+    if (deck.handSize === 1) await Promise.all([motion.flip(true), motion.ready()]);
+    else await motion.ready();
+    status(!canSave ? 'Hand drawn. Progress can’t be saved in this browser.' : 'Your hand is ready. Open Cards in hand to begin your interpretation.');
   } finally {
+    motion.cleanupDeal();
     setBusy(false);
   }
 }
@@ -178,58 +189,77 @@ $('hand-size').addEventListener('change', () => {
   save();
   render();
 });
-$('hand-button').addEventListener('click', () => {
-  if (!busy && deck?.hand.length) $('hand-dialog').showModal();
-});
-function nextReading() {
+function openHand() {
+  if (!busy && deck?.hand.length) motion.open($('hand-dialog'));
+}
+$('hand-button').addEventListener('click', openHand);
+$('hand-fan').addEventListener('click', openHand);
+async function nextReading() {
   if (busy || !deck?.hand.length) return;
-  $('hand-dialog').close();
+  setBusy(true);
   deck.nextReading();
   save();
-  render();
-  status('Your hand has been released. Set an intention for your next reading.');
-  setBusy(false);
+  try {
+    await motion.close($('hand-dialog'));
+    await motion.release();
+    render();
+    await motion.pulse();
+    status('Your hand has been released. Set an intention for your next reading.');
+  } finally {
+    setBusy(false);
+  }
 }
 $('next-reading-button').addEventListener('click', nextReading);
 $('dialog-next-reading').addEventListener('click', nextReading);
-$('return-to-deck').addEventListener('click', () => $('hand-dialog').close());
+$('return-to-deck').addEventListener('click', () => motion.close($('hand-dialog')));
 $('shuffle-button').addEventListener('click', async () => {
   if (busy || !deck) return;
   setBusy(true);
   deck.shuffle();
   save();
-  await animate([{ transform: 'translateX(0) rotate(0)' }, { transform: 'translateX(-12px) rotate(-5deg)', offset: .3 }, { transform: 'translateX(12px) rotate(5deg)', offset: .65 }, { transform: 'translateX(0) rotate(0)' }], 380);
-  status('The remaining cards have been shuffled.');
-  setBusy(false);
+  try {
+    await motion.shuffle();
+    status('The remaining cards have been shuffled.');
+  } finally {
+    setBusy(false);
+  }
 });
 $('clear-button').addEventListener('click', async () => {
   if (busy || !deck?.current) return;
   setBusy(true);
-  await animate([{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(10px)' }], 140);
   deck.clear();
   save();
-  render();
-  await animate([{ opacity: 0 }, { opacity: 1 }], 180);
-  status('Card hidden. It is still saved in Cards in hand.');
-  setBusy(false);
+  try {
+    await motion.flip(false);
+    render();
+    status('Card hidden. It is still saved in Cards in hand.');
+  } finally {
+    setBusy(false);
+  }
 });
 
-$('reset-button').addEventListener('click', () => {
+$('reset-button').addEventListener('click', async () => {
   if (busy || !deck) return;
+  setBusy(true);
   deck.reset();
   save();
   render();
-  status(canSave ? (deck.hand.length ? 'History cleared. Your current hand is still held for interpretation.' : 'History cleared. Every card is available again.') : 'History cleared for this visit. Browser storage is unavailable.');
-  setBusy(false);
+  try {
+    await motion.pulse();
+    status(canSave ? (deck.hand.length ? 'History cleared. Your current hand is still held for interpretation.' : 'History cleared. Every card is available again.') : 'History cleared for this visit. Browser storage is unavailable.');
+  } finally {
+    setBusy(false);
+  }
 });
 
 for (const [button, dialog] of [['help-button', 'help-dialog'], ['credits-button', 'credits-dialog'], ['hand-button', 'hand-dialog']]) {
   const element = $(dialog);
-  if (dialog !== 'hand-dialog') $(button).addEventListener('click', () => element.showModal());
-  element.querySelector('.dialog-close').addEventListener('click', () => element.close());
+  if (dialog !== 'hand-dialog') $(button).addEventListener('click', () => motion.open(element));
+  element.querySelector('.dialog-close').addEventListener('click', () => motion.close(element));
+  element.addEventListener('cancel', event => { event.preventDefault(); motion.close(element); });
   element.addEventListener('click', event => {
     const rect = element.getBoundingClientRect();
-    if (event.target === element && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) element.close();
+    if (event.target === element && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) motion.close(element);
   });
 }
 
@@ -290,4 +320,5 @@ addEventListener('storage', event => {
   }
 });
 
+motion.initialize(() => busy);
 init();
