@@ -125,3 +125,40 @@ test('a corrupt saved hand cannot introduce duplicates into a reading', () => {
   assert.deepEqual(restored.hand, []);
   assert.equal(restored.remaining.length, ids.length);
 });
+
+test('adding cards preserves the held reading and seen history while making new cards available', () => {
+  const original = new Deck(['a', 'b', 'c', 'd', 'e', 'f'], null, () => .5);
+  const previouslySeen = original.draw().id;
+  original.clear();
+  const held = original.drawHand(3).ids;
+  const saved = original.snapshot();
+  const expanded = new Deck(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], saved, () => .5);
+  assert.deepEqual(expanded.hand, held);
+  assert.equal(expanded.handSize, 3);
+  assert.equal(expanded.last, saved.last);
+  assert.equal(expanded.current, saved.current);
+  assert.deepEqual(new Set(expanded.remaining), new Set([...saved.remaining, 'g', 'h']));
+  expanded.nextReading();
+  const draws = Array.from({ length: expanded.remaining.length }, () => expanded.draw().id);
+  assert.equal(new Set(draws).size, 4);
+  assert.equal(draws.includes(previouslySeen), false);
+  assert.ok(held.every(id => !draws.includes(id)));
+  assert.ok(draws.includes('g') && draws.includes('h'));
+});
+
+test('held cards reveal individually and keep their reveal state across reloads and collection growth', () => {
+  const deck = new Deck(['a','b','c','d','e']);
+  const held = deck.drawHand(3).ids;
+  assert.deepEqual(deck.revealed, []);
+  assert.throws(() => deck.reveal('missing'), /held/);
+  deck.reveal(held[1]);
+  deck.reveal(held[1]);
+  const restored = new Deck(['a','b','c','d','e','f'], deck.snapshot());
+  assert.deepEqual(restored.revealed, [held[1]]);
+  restored.reset();
+  assert.deepEqual(restored.revealed, [held[1]]);
+  restored.nextReading();
+  assert.deepEqual(restored.revealed, []);
+  restored.drawHand(5);
+  assert.deepEqual(restored.revealed, []);
+});

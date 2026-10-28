@@ -1,4 +1,4 @@
-import { Deck } from './deck.js';
+import { Deck } from './deck.js?v=20261028-3';
 import { motion } from './motion.js';
 
 const $ = id => document.getElementById(id);
@@ -130,11 +130,59 @@ function renderHand() {
     source.rel = 'noopener noreferrer';
     source.textContent = 'Image source';
     source.setAttribute('aria-label', `Image source for card ${index + 1}`);
-    item.append(label, image, source);
+    if (deck.handSize > 1) {
+      const revealed = deck.revealed.includes(id);
+      const flip = document.createElement('button');
+      flip.type = 'button';
+      flip.className = 'held-flip';
+      flip.dataset.revealed = String(revealed);
+      flip.setAttribute('aria-pressed', String(revealed));
+      flip.setAttribute('aria-label', revealed ? `Card ${index + 1} revealed: ${card.alt}` : `Reveal card ${index + 1}`);
+      const inner = document.createElement('span');
+      inner.className = 'held-flip-inner';
+      const back = document.createElement('span');
+      back.className = 'held-flip-back';
+      back.setAttribute('aria-hidden', 'true');
+      const engraving = document.createElement('img');
+      engraving.src = 'assets/oracle-back.svg';
+      engraving.alt = '';
+      engraving.draggable = false;
+      back.append(engraving);
+      const front = document.createElement('span');
+      front.className = 'held-flip-front';
+      front.setAttribute('aria-hidden', String(!revealed));
+      front.append(image);
+      inner.append(back, front);
+      flip.append(inner);
+      const hint = document.createElement('span');
+      hint.className = 'held-flip-hint';
+      hint.textContent = revealed ? 'Revealed' : 'Tap to reveal';
+      source.style.visibility = revealed ? 'visible' : 'hidden';
+      source.setAttribute('aria-hidden', String(!revealed));
+      source.tabIndex = revealed ? 0 : -1;
+      flip.addEventListener('click', () => {
+        if (deck.revealed.includes(id)) return;
+        deck.reveal(id);
+        save();
+        flip.dataset.revealed = 'true';
+        flip.setAttribute('aria-pressed', 'true');
+        flip.setAttribute('aria-label', `Card ${index + 1} revealed: ${card.alt}`);
+        front.setAttribute('aria-hidden', 'false');
+        source.style.visibility = 'visible';
+        source.setAttribute('aria-hidden', 'false');
+        source.tabIndex = 0;
+        hint.textContent = 'Revealed';
+      });
+      item.append(label, flip, hint, source);
+    } else {
+      item.append(label, image, source);
+    }
     fragment.append(item);
   });
   $('hand-grid').replaceChildren(fragment);
-  $('hand-summary').textContent = `${deck.hand.length} ${deck.hand.length === 1 ? 'card' : 'cards'}, held together for your interpretation.`;
+  $('hand-summary').textContent = deck.handSize > 1
+    ? `${deck.hand.length} cards in your reading. Tap each card to reveal it when you are ready.`
+    : 'One card, held for your interpretation.';
 }
 
 function loadImage(src) {
@@ -252,9 +300,12 @@ $('reset-button').addEventListener('click', async () => {
   }
 });
 
-for (const [button, dialog] of [['help-button', 'help-dialog'], ['credits-button', 'credits-dialog'], ['hand-button', 'hand-dialog']]) {
+for (const [button, dialog] of [['help-button', 'help-dialog'], ['credits-button', 'credits-dialog'], ['hand-button', 'hand-dialog'], ['coffee-button', 'coffee-dialog']]) {
   const element = $(dialog);
-  if (dialog !== 'hand-dialog') $(button).addEventListener('click', () => motion.open(element));
+  if (dialog !== 'hand-dialog') $(button).addEventListener('click', () => {
+    if (dialog === 'coffee-dialog') resetCoffee();
+    motion.open(element);
+  });
   element.querySelector('.dialog-close').addEventListener('click', () => motion.close(element));
   element.addEventListener('cancel', event => { event.preventDefault(); motion.close(element); });
   element.addEventListener('click', event => {
@@ -262,6 +313,47 @@ for (const [button, dialog] of [['help-button', 'help-dialog'], ['credits-button
     if (event.target === element && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) motion.close(element);
   });
 }
+
+let copyTimer;
+function resetCopy() {
+  clearTimeout(copyTimer);
+  $('copy-email').querySelector('span').textContent = 'Copy Email';
+  $('copy-email').querySelector('use').setAttribute('href', '#copy-icon');
+  $('copy-feedback').textContent = '';
+}
+function resetCoffee() {
+  document.querySelector('input[name="support-option"][value="coffee"]').checked = true;
+  $('coffee-donation').hidden = false;
+  $('coffee-hire').hidden = true;
+  resetCopy();
+}
+for (const input of document.querySelectorAll('input[name="support-option"]')) {
+  input.addEventListener('change', () => {
+    $('coffee-donation').hidden = input.value !== 'coffee';
+    $('coffee-hire').hidden = input.value !== 'hire';
+    resetCopy();
+  });
+}
+$('contact-email').addEventListener('focus', event => event.target.select());
+$('copy-email').addEventListener('click', async () => {
+  resetCopy();
+  try {
+    await navigator.clipboard.writeText($('contact-email').value);
+    $('copy-email').querySelector('span').textContent = 'Copied!';
+    $('copy-email').querySelector('use').setAttribute('href', '#check-icon');
+    $('copy-feedback').textContent = 'Copied!';
+    copyTimer = setTimeout(resetCopy, 2200);
+  } catch {
+    $('copy-feedback').textContent = 'Couldn’t copy. Select the email address to copy it manually.';
+  }
+});
+$('motion-toggle').addEventListener('click', () => {
+  const paused = document.body.classList.toggle('motion-paused');
+  $('motion-toggle').setAttribute('aria-pressed', String(paused));
+  $('motion-toggle').textContent = paused ? 'Resume motion' : 'Pause motion';
+});
+document.addEventListener('visibilitychange', () => document.body.classList.toggle('page-hidden', document.hidden));
+document.body.classList.toggle('page-hidden', document.hidden);
 
 async function init() {
   try {

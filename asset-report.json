@@ -29,8 +29,8 @@
       "id": "e1f93bb6bc2e5d2e17988409a6c07450"
     }
   ],
-  "final_count": 228,
-  "bytes": 5196142,
+  "final_count": 326,
+  "bytes": 6637352,
   "selection": "Each image visually inspected. Photo-led reactions, expressive faces, awkward scenes and funny animal photos; no quote panels, cartoon illustrations, text-heavy jokes or multi-panel collages. Small natural television subtitles, logos and occasional minor labels may remain.",
   "provenance": "Every image downloaded from Pinterest pinimg CDN, with a Pinterest pin or board source URL. Live candidates captured from the reference board and related recommendations.",
   "deduplication": [
@@ -51,11 +51,28 @@
     "prior-230"
   ],
   "verification": {
-    "valid_images": 228,
-    "unique_ids": 228,
-    "unique_sha256": 228,
+    "valid_images": 326,
+    "unique_ids": 326,
+    "unique_sha256": 326,
     "max_dimension": 720,
     "all_sources_pinterest": true,
     "alt_text_has_no_word_meme": true
-  }
+  },
+  "expansions": [
+    {
+      "date": "2026-10-28",
+      "previous_count": 228,
+      "observed_source_images": 472,
+      "new_source_candidates_downloaded": 307,
+      "visually_shortlisted": 127,
+      "duplicates_or_alternate_crops_excluded": 29,
+      "added": 98,
+      "sources": [
+        "https://ph.pinterest.com/arabellara4444/charot-cards/",
+        "https://ph.pinterest.com/pin/694117361335411537/",
+        "https://ph.pinterest.com/search/pins/?q=filipino%20reaction%20pictures%20no%20text&rs=typed"
+      ],
+      "review": "Every shortlisted image compared visually with its two nearest existing or accepted image matches. Difference and perceptual hashes compared full images and center crops at 90%, 80%, and 70%. Added files checked by SHA-256. English alt text written for each addition."
+    }
+  ]
 }

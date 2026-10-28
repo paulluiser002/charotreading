@@ -1,6 +1,6 @@
-# The Quiet Oracle
+# Charot Reading
 
-A mobile responsive, login-free photographic tarot reading site. Choose a single-card, three-card, or five-card reading, then draw the complete hand. Open Cards in hand to interpret the images together. The hand stays saved until Next reading; shuffling or clearing the displayed card does not release it. Each image links to its Pinterest source. On mobile, Fullscreen expands the reading and uses native fullscreen when supported; Exit fullscreen restores the standard view.
+A mobile responsive, login-free photographic tarot reading site. Choose a single-card, three-card, or five-card reading, then draw the complete hand. Open Cards in hand to interpret the images together. Three- and five-card hands start face down; tap each card for a 3D reveal. Revealed cards remain revealed until Next reading. The hand stays saved until Next reading; shuffling or clearing the displayed card does not release it. Each image links to its Pinterest source. On mobile, Fullscreen expands the reading and uses native fullscreen when supported; Exit fullscreen restores the standard view.
 
 ## Run
 
@@ -23,4 +23,6 @@ Deck progress is stored in this browser's localStorage. Clearing a card and shuf
 
 `dist/cards.json` contains card IDs, local image paths, English descriptions, Pinterest sources, and content hashes. The images live in `dist/assets/cards/`. Assets are served locally so visitors do not need Pinterest access. Pinterest provenance does not establish image licensing; images remain their creators' work. See `asset-report.json` for collection and deduplication notes.
 
-To add or replace cards, update the manifest and the corresponding image files, then run asset validation. A changed card inventory starts a fresh round to keep saved progress consistent.
+To add or replace cards, update the manifest and the corresponding image files, then run asset validation. Appending new cards preserves held readings and draw history, shuffling the additions into the unseen deck. Removing or reordering existing cards starts a fresh round to keep saved progress consistent.
+
+The header coffee button reuses the One ODC support QR and Hire me contact. Page loads feature a 2.6-second engraved-card scene; reduced motion skips it. The footer Pause motion control stops the decorative background and coffee loops. Static script URLs are versioned when their interfaces change to prevent mixing cached releases.

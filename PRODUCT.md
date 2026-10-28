@@ -1,4 +1,4 @@
-# The Quiet Oracle
+# Charot Reading
 
 <!-- impeccable:product-schema 1 -->
 
@@ -33,4 +33,4 @@ The user requested a complete professional tarot redesign and English copy after
 
 ## Builder choices
 
-The Quiet Oracle is the English-facing identity; the existing site address remains unchanged. Original vector sun-and-moon engraving replaces the playful card-back illustration.
+Charot Reading is the English-facing identity; the existing site address remains unchanged. Original vector sun-and-moon engraving replaces the playful card-back illustration.
