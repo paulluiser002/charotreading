@@ -20,6 +20,7 @@
     <symbol id="clear-icon" viewBox="0 0 24 24"><path d="m7 7 10 10M7 17 17 7"/></symbol>
     <symbol id="external-icon" viewBox="0 0 24 24"><path d="M14 4h6v6m0-6L10 14M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></symbol>
     <symbol id="moon-icon" viewBox="0 0 24 24"><path d="M19.5 15A8.5 8.5 0 0 1 9 4.5 8.5 8.5 0 1 0 19.5 15Z"/></symbol>
+    <symbol id="fullscreen-icon" viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></symbol>
   </svg>
 
   <header class="site-header">
@@ -45,6 +46,7 @@
       </div>
 
       <div class="reading-space">
+        <button class="fullscreen-button" id="fullscreen-button" aria-label="Enter fullscreen" aria-pressed="false"><svg aria-hidden="true"><use href="#fullscreen-icon"/></svg><span>Fullscreen</span></button>
         <div class="card-table">
           <img class="celestial-dial" src="assets/celestial-dial.svg" alt="" aria-hidden="true">
           <div class="deck-stage" id="deck-stage" aria-busy="true">
@@ -70,17 +72,13 @@
             <button class="button button-primary" id="draw-button" disabled><svg aria-hidden="true"><use href="#star-icon"/></svg><span>Draw a card</span></button>
             <button class="button button-clear" id="clear-button" aria-label="Clear card" disabled><svg aria-hidden="true"><use href="#clear-icon"/></svg><span>Clear</span></button>
           </div>
-          <div class="deck-progress" id="deck-progress" hidden>
-            <div class="progress-labels"><span><strong id="remaining-count">0</strong> cards remaining</span><span id="drawn-count">0 drawn</span></div>
-            <div class="progress-track" role="progressbar" aria-label="Cards drawn this cycle" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0" id="progress-bar"><div id="progress-fill"></div></div>
-          </div>
           <a id="pin-link" class="pin-link" href="https://ph.pinterest.com/arabellara4444/charot-cards/" target="_blank" rel="noopener noreferrer" hidden>Image source <svg aria-hidden="true"><use href="#external-icon"/></svg></a>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer"><span>A quiet space for intuition.</span><span class="footer-ornament" aria-hidden="true">✧</span><button id="credits-button" aria-haspopup="dialog">The collection</button></footer>
+  <footer class="site-footer"><span>A quiet space for intuition.</span><span class="footer-ornament" aria-hidden="true">✧</span><div class="footer-actions"><button id="reset-button" title="Clear drawn-card history and make every card available again" disabled>Reset history</button><button id="credits-button" aria-haspopup="dialog">The collection</button></div></footer>
 
   <dialog id="help-dialog" aria-labelledby="help-title">
     <button class="dialog-close" aria-label="Close reading guide">×</button>
@@ -88,6 +86,7 @@
     <h2 id="help-title">Let the image speak.</h2>
     <ol><li><strong>Set an intention.</strong> Bring a question, a feeling, or a situation into focus.</li><li><strong>Draw a card.</strong> Notice the expressions, gestures, and details that first catch your attention.</li><li><strong>Reflect.</strong> Consider how the image relates to your question. The interpretation is yours.</li></ol>
     <p>Draw again to explore another perspective. Shuffle rearranges the remaining deck. Clear returns the current card to its resting state without restoring it to the deck.</p>
+    <p>To begin again, select <strong>Reset history</strong> in the footer. This clears your current card and drawn-card history, making the entire collection available again.</p>
     <p class="dialog-footnote">Cards appear once per cycle. A new cycle begins after the entire collection has been drawn. Your place is saved in this browser when storage is available.</p>
   </dialog>
   <dialog id="credits-dialog" aria-labelledby="credits-title">

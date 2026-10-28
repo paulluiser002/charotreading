@@ -8,6 +8,45 @@ let byId = new Map();
 let deck;
 let busy = true;
 let canSave = true;
+let nativeFullscreen = false;
+
+function setReadingFocus(enabled) {
+  document.body.classList.toggle('reading-focus', enabled);
+  $('fullscreen-button').setAttribute('aria-pressed', String(enabled));
+  $('fullscreen-button').setAttribute('aria-label', enabled ? 'Exit fullscreen' : 'Enter fullscreen');
+  $('fullscreen-button').querySelector('span').textContent = enabled ? 'Exit fullscreen' : 'Fullscreen';
+  if (enabled) window.scrollTo(0, 0);
+}
+
+$('fullscreen-button').addEventListener('click', () => {
+  if (document.body.classList.contains('reading-focus')) {
+    setReadingFocus(false);
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => setReadingFocus(true));
+    }
+    return;
+  }
+  setReadingFocus(true);
+  // Do not block Exit while a browser's native fullscreen request is pending.
+  if (document.fullscreenEnabled && document.documentElement.requestFullscreen) {
+    document.documentElement.requestFullscreen({ navigationUI: 'hide' }).catch(() => {});
+  }
+});
+
+document.addEventListener('fullscreenchange', () => {
+  if (document.fullscreenElement) {
+    nativeFullscreen = true;
+    if (!document.body.classList.contains('reading-focus')) {
+      document.exitFullscreen().catch(() => setReadingFocus(true));
+    }
+  } else if (nativeFullscreen) {
+    nativeFullscreen = false;
+    setReadingFocus(false);
+  }
+});
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && !document.fullscreenElement) setReadingFocus(false);
+});
 
 function savedProgress() {
   try { return JSON.parse(localStorage.getItem(storageKey)); }
@@ -30,6 +69,7 @@ function setBusy(value, loading = false) {
   $('draw-button').disabled = value || !deck;
   $('shuffle-button').disabled = value || !deck || deck.remaining.length < 2;
   $('clear-button').disabled = value || !deck?.current;
+  $('reset-button').disabled = value || !deck;
   $('card-loading').hidden = !loading;
 }
 
@@ -48,13 +88,6 @@ function render() {
     $('card-image').removeAttribute('src');
     $('card-image').alt = '';
   }
-  const drawn = cards.length - deck.remaining.length;
-  $('remaining-count').textContent = deck.remaining.length;
-  $('drawn-count').textContent = `${drawn} drawn`;
-  $('progress-fill').style.width = `${drawn / cards.length * 100}%`;
-  $('progress-bar').setAttribute('aria-valuemax', String(cards.length));
-  $('progress-bar').setAttribute('aria-valuenow', String(drawn));
-  $('deck-progress').hidden = false;
 }
 
 async function animate(frames, duration = 240) {
@@ -119,6 +152,15 @@ $('clear-button').addEventListener('click', async () => {
   render();
   await animate([{ opacity: 0 }, { opacity: 1 }], 180);
   status('Your card has been cleared. Draw when you are ready.');
+  setBusy(false);
+});
+
+$('reset-button').addEventListener('click', () => {
+  if (busy || !deck) return;
+  deck.reset();
+  save();
+  render();
+  status(canSave ? 'History cleared. Every card is available again.' : 'History cleared for this visit. Browser storage is unavailable.');
   setBusy(false);
 });
 

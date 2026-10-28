@@ -82,11 +82,6 @@ h1 { font-family: var(--display); font-size: clamp(68px,6.4vw,91px); font-weight
 .button-secondary { border-color: #c8c0ac; }
 .button-secondary:hover:not(:disabled), .button-clear:hover:not(:disabled) { background: #e9e3d5; }
 .button-clear { color: var(--muted); padding: 0 7px; }
-.deck-progress { max-width: 310px; margin: 21px auto 0; }
-.progress-labels { display: flex; justify-content: space-between; color: var(--muted); font-size: 11px; margin-bottom: 8px; }
-.progress-labels strong { font-weight: 500; color: var(--ink); }
-.progress-track { height: 2px; background: #ddd5c3; overflow: hidden; }
-#progress-fill { background: #a38b53; height: 100%; width: 0; transition: width .3s; }
 .pin-link { display: inline-flex; gap: 5px; align-items: center; color: var(--muted); font-size: 11px; text-decoration-color: #bbb29d; text-underline-offset: 4px; margin-top: 15px; }
 .pin-link svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 1.4; }
 .site-footer { max-width: 1320px; width: calc(100% - 112px); margin: 0 auto; border-top: 1px solid var(--line); padding: 23px 0; display: flex; justify-content: space-between; align-items: center; position: relative; color: var(--muted); font-size: 11px; }
@@ -107,6 +102,25 @@ dialog li { padding-left: 5px; margin-bottom: 13px; }
 @media (min-width: 801px) and (max-height: 800px) { .site-header { height: 78px; } .reading { margin-top: 20px; margin-bottom: 20px; } .deck-stage { width: 240px; height: 354px; } .card-table { padding: 15px 0; } h1 { font-size: 77px; } .intention-note { margin-top: 30px; padding-top: 23px; } .collection-note { margin-top: 24px; } .celestial-dial { width: 435px; } .site-footer { padding: 15px 0; } }
 @media (max-width: 1050px) { .site-header,.site-footer { width: calc(100% - 64px); } .reading { width: calc(100% - 80px); gap: 30px; } h1 { font-size: 74px; } .intro { padding-left: 0; } .header-note { display: none; } .guide-button { margin-left: auto; } .celestial-dial { max-width: 116%; } .button { padding-left: 10px; padding-right: 10px; } .button-primary { padding-left: 22px; padding-right: 22px; } }
 @media (max-width: 800px) { .site-header { height: 82px; } .reading { grid-template-columns: 1fr; width: calc(100% - 40px); max-width: 520px; gap: 0; margin: 31px auto 25px; } .intro { text-align: center; padding: 0; } .intro-note { justify-content: center; margin-bottom: 16px; font-size: 11px; } h1 { font-size: 62px; line-height: 1; letter-spacing: -1.4px; } h1 br { display: none; } .subtitle { margin-top: 16px; font-size: 13px; line-height: 1.8; } .intention-note,.collection-note { display: none; } .card-table { margin-top: 19px; padding: 24px 0 19px; } .deck-stage { width: 263px; height: 388px; } .celestial-dial { width: 440px; max-width: calc(100vw - 12px); } .reading-controls { margin-top: 8px; } .status { font-size: 11px; margin-bottom: 14px; } .site-footer { padding-top: 15px; padding-bottom: max(15px,env(safe-area-inset-bottom)); } .footer-ornament { display: none; } }
-@media (max-width: 480px) { .site-header,.site-footer { width: calc(100% - 40px); } .site-header { height: 76px; gap: 12px; } .wordmark { font-size: 23px; gap: 9px; } .wordmark svg { width: 29px; height: 29px; } .guide-button { font-size: 11px; padding-left: 14px; } .guide-button span { display: none; } h1 { font-size: clamp(44px,12.5vw,59px); } .reading { margin-top: 29px; } .deck-stage { width: min(68vw,263px); height: auto; aspect-ratio: 277/408; } .card-table { margin-top: 15px; } .actions { gap: 9px; } .button { font-size: 12px; } .button-primary { padding: 0 22px; } .deck-progress { max-width: 290px; } dialog { padding: 33px 26px; } .site-footer,.site-footer button { font-size: 11px; } }
+@media (max-width: 480px) { .site-header,.site-footer { width: calc(100% - 40px); } .site-header { height: 76px; gap: 12px; } .wordmark { font-size: 23px; gap: 9px; } .wordmark svg { width: 29px; height: 29px; } .guide-button { font-size: 11px; padding-left: 14px; } .guide-button span { display: none; } h1 { font-size: clamp(44px,12.5vw,59px); } .reading { margin-top: 29px; } .deck-stage { width: min(68vw,263px); height: auto; aspect-ratio: 277/408; } .card-table { margin-top: 15px; } .actions { gap: 9px; } .button { font-size: 12px; } .button-primary { padding: 0 22px; } dialog { padding: 33px 26px; } .site-footer,.site-footer button { font-size: 11px; } }
 @media (max-width: 359px) { .wordmark { font-size: 21px; gap: 7px; } .wordmark svg { width: 24px; height: 24px; } .guide-button { font-size: 10px; padding-left: 10px; } .site-header { gap: 8px; } .subtitle { font-size: 12px; } .actions { gap: 7px; } .button { padding: 0 8px; } .button-primary { padding: 0 17px; } }
 @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+
+.footer-actions { display: flex; align-items: center; gap: 24px; }
+@media (max-width: 620px) { .site-footer { flex-wrap: wrap; gap: 12px 20px; } .footer-actions { gap: 20px; } .site-footer button { min-height: 44px; } }
+.fullscreen-button { display: none; }
+@media (max-width: 800px) {
+  .fullscreen-button { display: flex; align-items: center; gap: 7px; margin: 15px 0 -16px auto; padding: 9px 10px; min-height: 44px; color: var(--muted); background: transparent; border: 1px solid transparent; border-radius: 3px; font-size: 11px; }
+  .fullscreen-button:hover { border-color: var(--line); }
+  .fullscreen-button svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.3; }
+}
+body.reading-focus { min-height: 100dvh; }
+.reading-focus .site-header, .reading-focus .intro, .reading-focus .site-footer { display: none; }
+.reading-focus main { min-height: 100dvh; }
+.reading-focus .reading { display: block; width: 100%; max-width: none; margin: 0; padding: 64px 16px 25px; }
+.reading-focus .reading-space { max-width: 650px; margin: auto; }
+.reading-focus .card-table { margin-top: 0; padding: 12px 0 20px; }
+.reading-focus .deck-stage { width: min(76vw, calc((100dvh - 220px) * .679)); max-width: 450px; height: auto; aspect-ratio: 277/408; }
+.reading-focus .celestial-dial { max-width: calc(100vw - 20px); }
+.reading-focus .fullscreen-button { display: inline-flex; align-items: center; gap: 8px; position: fixed; top: max(12px, env(safe-area-inset-top)); right: max(16px, env(safe-area-inset-right)); z-index: 10; margin: 0; padding: 10px 13px; min-height: 44px; font-size: 12px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); }
+.reading-focus .fullscreen-button svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.3; }

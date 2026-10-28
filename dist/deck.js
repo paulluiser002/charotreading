@@ -41,6 +41,13 @@ export class Deck {
 
   clear() { this.current = null; }
 
+  reset() {
+    this.remaining = [...this.ids];
+    this.current = null;
+    this.last = null;
+    this.shuffle();
+  }
+
   snapshot() {
     return { ids: [...this.ids], remaining: [...this.remaining], current: this.current, last: this.last };
   }

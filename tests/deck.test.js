@@ -40,3 +40,18 @@ test('invalid or outdated saved progress starts a valid fresh deck', () => {
     assert.equal(new Set(deck.remaining).size, ids.length);
   }
 });
+
+test('reset restores every card and forgets the displayed and last drawn card across reloads', () => {
+  const deck = new Deck(ids);
+  const previous = deck.draw().id;
+  deck.draw();
+  deck.reset();
+  assert.equal(deck.current, null);
+  assert.equal(deck.last, null);
+  assert.equal(deck.remaining.length, ids.length);
+  assert.ok(deck.remaining.includes(previous));
+  const restored = new Deck(ids, JSON.parse(JSON.stringify(deck.snapshot())));
+  const drawn = new Set(Array.from({ length: ids.length }, () => restored.draw().id));
+  assert.equal(drawn.size, ids.length);
+  assert.ok(drawn.has(previous));
+});
