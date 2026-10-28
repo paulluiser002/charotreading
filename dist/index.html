@@ -60,33 +60,36 @@
                 <div class="card-image-wrap"><img id="card-image" alt="" decoding="async"></div>
                 <div class="card-signature"><span></span><svg aria-hidden="true"><use href="#star-icon"/></svg><span></span></div>
               </div>
-              <div class="card-loading" id="card-loading" hidden><span class="spinner" aria-hidden="true"></span><span>Drawing your card…</span></div>
+              <div class="card-loading" id="card-loading" hidden><span class="spinner" aria-hidden="true"></span><span>Preparing your hand…</span></div>
             </div>
           </div>
         </div>
 
         <div class="reading-controls">
+          <div class="hand-size-control"><label for="hand-size">Cards per reading</label><select id="hand-size" disabled><option value="1">Single card</option><option value="3" selected>3 cards</option><option value="5">5 cards</option></select></div>
           <p class="status" id="status" role="status" aria-live="polite">Preparing your reading…</p>
           <div class="actions">
             <button class="button button-secondary" id="shuffle-button" aria-label="Shuffle deck" disabled><svg aria-hidden="true"><use href="#shuffle-icon"/></svg><span>Shuffle</span></button>
             <button class="button button-primary" id="draw-button" disabled><svg aria-hidden="true"><use href="#star-icon"/></svg><span>Draw a card</span></button>
             <button class="button button-clear" id="clear-button" aria-label="Clear card" disabled><svg aria-hidden="true"><use href="#clear-icon"/></svg><span>Clear</span></button>
           </div>
+          <div class="hand-actions"><button class="hand-button" id="hand-button" aria-haspopup="dialog" disabled><span>Cards in hand</span><span class="hand-count" id="hand-count">0</span></button><button class="next-reading-button" id="next-reading-button" disabled>Next reading</button></div>
+          <p class="hand-description" id="hand-description">Draw your hand before opening it for interpretation.</p>
           <a id="pin-link" class="pin-link" href="https://ph.pinterest.com/arabellara4444/charot-cards/" target="_blank" rel="noopener noreferrer" hidden>Image source <svg aria-hidden="true"><use href="#external-icon"/></svg></a>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer"><span>A quiet space for intuition.</span><span class="footer-ornament" aria-hidden="true">✧</span><div class="footer-actions"><button id="reset-button" title="Clear drawn-card history and make every card available again" disabled>Reset history</button><button id="credits-button" aria-haspopup="dialog">The collection</button></div></footer>
+  <footer class="site-footer"><span>A quiet space for intuition.</span><span class="footer-ornament" aria-hidden="true">✧</span><div class="footer-actions"><button id="reset-button" title="Clear past draw history without releasing the current hand" disabled>Reset history</button><button id="credits-button" aria-haspopup="dialog">The collection</button></div></footer>
 
   <dialog id="help-dialog" aria-labelledby="help-title">
     <button class="dialog-close" aria-label="Close reading guide">×</button>
     <p class="dialog-kicker">The practice</p>
     <h2 id="help-title">Let the image speak.</h2>
-    <ol><li><strong>Set an intention.</strong> Bring a question, a feeling, or a situation into focus.</li><li><strong>Draw a card.</strong> Notice the expressions, gestures, and details that first catch your attention.</li><li><strong>Reflect.</strong> Consider how the image relates to your question. The interpretation is yours.</li></ol>
-    <p>Draw again to explore another perspective. Shuffle rearranges the remaining deck. Clear returns the current card to its resting state without restoring it to the deck.</p>
-    <p>To begin again, select <strong>Reset history</strong> in the footer. This clears your current card and drawn-card history, making the entire collection available again.</p>
+    <ol><li><strong>Set an intention.</strong> Bring a question, a feeling, or a situation into focus.</li><li><strong>Choose your hand.</strong> Select a single card, three cards, or five cards, then draw.</li><li><strong>Open Cards in hand.</strong> Read the images together. The interpretation is yours.</li></ol>
+    <p>Your hand stays saved until you select <strong>Next reading</strong>. Clear hides the displayed single card; Shuffle rearranges the unseen deck. Neither releases your hand.</p>
+    <p><strong>Reset history</strong> in the footer restores the unheld cards. Your current hand stays reserved until Next reading.</p>
     <p class="dialog-footnote">Cards appear once per cycle. A new cycle begins after the entire collection has been drawn. Your place is saved in this browser when storage is available.</p>
   </dialog>
   <dialog id="credits-dialog" aria-labelledby="credits-title">
@@ -97,6 +100,15 @@
     <p>The collection draws from expressive photography and shared visual culture. Each card links to its Pinterest source, with images credited to their respective creators.</p>
     <div class="source-list" id="source-list"></div>
     <p class="dialog-footnote">The images are presented without assigned meanings. Your perspective shapes each reading.</p>
+  </dialog>
+  <dialog id="hand-dialog" class="hand-dialog" aria-labelledby="hand-title">
+    <button class="dialog-close" aria-label="Close cards in hand">×</button>
+    <p class="dialog-kicker">Your reading</p>
+    <h2 id="hand-title">Cards in hand</h2>
+    <p id="hand-summary"></p>
+    <div class="hand-grid" id="hand-grid"></div>
+    <p class="hand-dialog-note">Take your time. These cards stay with this reading until you select Next reading.</p>
+    <div class="hand-dialog-actions"><button class="button button-secondary" id="return-to-deck">Return to deck</button><button class="button button-primary" id="dialog-next-reading" disabled>Next reading</button></div>
   </dialog>
 </body>
 </html>

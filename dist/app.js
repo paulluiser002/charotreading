@@ -45,7 +45,7 @@ document.addEventListener('fullscreenchange', () => {
   }
 });
 document.addEventListener('keydown', event => {
-  if (event.key === 'Escape' && !document.fullscreenElement) setReadingFocus(false);
+  if (event.key === 'Escape' && !document.fullscreenElement && !document.querySelector('dialog[open]')) setReadingFocus(false);
 });
 
 function savedProgress() {
@@ -66,10 +66,14 @@ function status(message, error = false) {
 function setBusy(value, loading = false) {
   busy = value;
   $('deck-stage').setAttribute('aria-busy', String(value));
-  $('draw-button').disabled = value || !deck;
+  $('draw-button').disabled = value || !deck || deck.hand.length > 0;
   $('shuffle-button').disabled = value || !deck || deck.remaining.length < 2;
   $('clear-button').disabled = value || !deck?.current;
   $('reset-button').disabled = value || !deck;
+  $('hand-size').disabled = value || !deck || deck.hand.length > 0;
+  $('hand-button').disabled = value || !deck || !deck.hand.length;
+  $('next-reading-button').disabled = value || !deck || !deck.hand.length;
+  $('dialog-next-reading').disabled = value || !deck || !deck.hand.length;
   $('card-loading').hidden = !loading;
 }
 
@@ -88,6 +92,40 @@ function render() {
     $('card-image').removeAttribute('src');
     $('card-image').alt = '';
   }
+  $('hand-size').value = String(deck.handSize);
+  $('draw-button').querySelector('span').textContent = deck.handSize === 1 ? 'Draw a card' : `Draw ${deck.handSize} cards`;
+  $('hand-count').textContent = deck.hand.length;
+  $('hand-button').setAttribute('aria-label', `Cards in hand (${deck.hand.length})`);
+  $('hand-description').textContent = deck.hand.length
+    ? 'Your cards are held until you select Next reading.'
+    : 'Draw your hand before opening it for interpretation.';
+  renderHand();
+  if (!deck.hand.length && $('hand-dialog').open) $('hand-dialog').close();
+}
+
+function renderHand() {
+  const fragment = document.createDocumentFragment();
+  deck.hand.forEach((id, index) => {
+    const card = byId.get(id);
+    const item = document.createElement('figure');
+    item.className = 'held-card';
+    const label = document.createElement('figcaption');
+    label.textContent = `Card ${index + 1}`;
+    const image = document.createElement('img');
+    image.src = card.image;
+    image.alt = card.alt;
+    image.decoding = 'async';
+    const source = document.createElement('a');
+    source.href = card.source;
+    source.target = '_blank';
+    source.rel = 'noopener noreferrer';
+    source.textContent = 'Image source';
+    source.setAttribute('aria-label', `Image source for card ${index + 1}`);
+    item.append(label, image, source);
+    fragment.append(item);
+  });
+  $('hand-grid').replaceChildren(fragment);
+  $('hand-summary').textContent = `${deck.hand.length} ${deck.hand.length === 1 ? 'card' : 'cards'}, held together for your interpretation.`;
 }
 
 async function animate(frames, duration = 240) {
@@ -114,26 +152,47 @@ async function draw() {
   if (busy || !deck) return;
   // Only commit a draw after its image loads, so a failed request never consumes a card.
   const draft = new Deck(cards.map(card => card.id), deck.snapshot());
-  const result = draft.draw();
+  const result = draft.drawHand(deck.handSize);
   setBusy(true, true);
-  status('Drawing your card…');
+  status(deck.handSize === 1 ? 'Drawing your card…' : `Drawing your ${deck.handSize}-card hand…`);
   try {
-    await loadImage(byId.get(result.id).image);
+    await Promise.all(result.ids.map(id => loadImage(byId.get(id).image)));
     await animate([{ transform: 'rotate(0)', opacity: 1 }, { transform: 'translateY(-9px) rotate(-4deg) scale(.97)', opacity: 0 }], 140);
     deck = draft;
     save();
     render();
     $('card-loading').hidden = true;
     await animate([{ transform: 'rotateY(-65deg) rotate(-3deg)', opacity: 0 }, { transform: 'rotateY(0) rotate(0)', opacity: 1 }], 340);
-    status(!canSave ? 'Card drawn. Progress can’t be saved in this browser.' : result.newRound ? 'A new cycle begins. Take a moment to set your intention.' : 'Take your time. Let the image speak to you.');
+    status(!canSave ? 'Hand drawn. Progress can’t be saved in this browser.' : 'Your hand is ready. Open Cards in hand to begin your interpretation.');
   } catch {
-    status('This card couldn’t load. Tap Draw a card to try again.', true);
+    status('Your hand couldn’t load. No cards were used. Try drawing again.', true);
   } finally {
     setBusy(false);
   }
 }
 
 $('draw-button').addEventListener('click', draw);
+$('hand-size').addEventListener('change', () => {
+  if (busy || !deck || deck.hand.length) return;
+  deck.handSize = Number($('hand-size').value);
+  save();
+  render();
+});
+$('hand-button').addEventListener('click', () => {
+  if (!busy && deck?.hand.length) $('hand-dialog').showModal();
+});
+function nextReading() {
+  if (busy || !deck?.hand.length) return;
+  $('hand-dialog').close();
+  deck.nextReading();
+  save();
+  render();
+  status('Your hand has been released. Set an intention for your next reading.');
+  setBusy(false);
+}
+$('next-reading-button').addEventListener('click', nextReading);
+$('dialog-next-reading').addEventListener('click', nextReading);
+$('return-to-deck').addEventListener('click', () => $('hand-dialog').close());
 $('shuffle-button').addEventListener('click', async () => {
   if (busy || !deck) return;
   setBusy(true);
@@ -160,13 +219,13 @@ $('reset-button').addEventListener('click', () => {
   deck.reset();
   save();
   render();
-  status(canSave ? 'History cleared. Every card is available again.' : 'History cleared for this visit. Browser storage is unavailable.');
+  status(canSave ? (deck.hand.length ? 'History cleared. Your current hand is still held for interpretation.' : 'History cleared. Every card is available again.') : 'History cleared for this visit. Browser storage is unavailable.');
   setBusy(false);
 });
 
-for (const [button, dialog] of [['help-button', 'help-dialog'], ['credits-button', 'credits-dialog']]) {
+for (const [button, dialog] of [['help-button', 'help-dialog'], ['credits-button', 'credits-dialog'], ['hand-button', 'hand-dialog']]) {
   const element = $(dialog);
-  $(button).addEventListener('click', () => element.showModal());
+  if (dialog !== 'hand-dialog') $(button).addEventListener('click', () => element.showModal());
   element.querySelector('.dialog-close').addEventListener('click', () => element.close());
   element.addEventListener('click', event => {
     const rect = element.getBoundingClientRect();
@@ -210,7 +269,7 @@ async function init() {
     $('source-list').replaceChildren(fragment);
     render();
     if (deck.current) await loadImage(byId.get(deck.current).image);
-    status(deck.current ? 'Welcome back. Your reading is as you left it.' : 'Take a breath. Draw when you are ready.');
+    status(deck.hand.length ? 'Welcome back. Your cards are still in hand.' : 'Take a breath. Draw when you are ready.');
     setBusy(false);
   } catch {
     status('The deck couldn’t load. Tap Retry to reconnect.', true);

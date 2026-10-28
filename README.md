@@ -1,6 +1,6 @@
 # The Quiet Oracle
 
-A mobile responsive, login-free photographic tarot reading site. Draw one card, shuffle the remaining cards, or clear the current card. Each image links to its Pinterest source. On mobile, Fullscreen expands the reading and uses native fullscreen when supported; Exit fullscreen restores the standard view.
+A mobile responsive, login-free photographic tarot reading site. Choose a single-card, three-card, or five-card reading, then draw the complete hand. Open Cards in hand to interpret the images together. The hand stays saved until Next reading; shuffling or clearing the displayed card does not release it. Each image links to its Pinterest source. On mobile, Fullscreen expands the reading and uses native fullscreen when supported; Exit fullscreen restores the standard view.
 
 ## Run
 
@@ -17,7 +17,7 @@ npm test
 node scripts/validate-assets.mjs
 ```
 
-Deck progress is stored in this browser's localStorage. Clearing a card and shuffling never restore drawn cards. Reset history, in the footer, clears the displayed card and saved draw history so every card can be drawn again. After every card is seen, a fresh round starts without immediately repeating the last card. Private browsing, clearing storage, or using another device starts a new deck. Concurrent draws in separate tabs are not an atomic operation.
+Deck progress is stored in this browser's localStorage. Clearing a card and shuffling never restore drawn cards. Reset history, in the footer, clears past draw history while preserving the currently held hand. The held cards stay reserved until Next reading. After every card is seen, a fresh round starts without immediately repeating the last card. Private browsing, clearing storage, or using another device starts a new deck. Concurrent draws in separate tabs are not an atomic operation.
 
 ## Images
 

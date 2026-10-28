@@ -124,3 +124,27 @@ body.reading-focus { min-height: 100dvh; }
 .reading-focus .celestial-dial { max-width: calc(100vw - 20px); }
 .reading-focus .fullscreen-button { display: inline-flex; align-items: center; gap: 8px; position: fixed; top: max(12px, env(safe-area-inset-top)); right: max(16px, env(safe-area-inset-right)); z-index: 10; margin: 0; padding: 10px 13px; min-height: 44px; font-size: 12px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); }
 .reading-focus .fullscreen-button svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.3; }
+.hand-size-control { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 14px; }
+.hand-size-control label { font-size: 11px; color: var(--muted); }
+.hand-size-control select { min-height: 40px; padding: 7px 30px 7px 12px; border: 1px solid #c8c0ac; border-radius: 3px; background: #f8f5ed; color: var(--ink); font: inherit; font-size: 12px; }
+.hand-size-control select:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.hand-size-control select:disabled { opacity: .65; }
+.hand-actions { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 17px; }
+.hand-button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 44px; padding: 8px 13px; border: 1px solid #c8c0ac; border-radius: 3px; background: #f8f5ed; color: var(--ink); font-size: 12px; }
+.hand-button:hover:not(:disabled) { background: #e9e3d5; }
+.hand-count { display: grid; place-items: center; min-width: 21px; height: 21px; padding: 0 5px; border-radius: 50%; background: var(--forest); color: #f4eddc; font-size: 11px; }
+.next-reading-button { min-height: 44px; padding: 8px 0; border: 0; background: transparent; color: var(--ink); text-decoration: underline; text-underline-offset: 4px; text-decoration-color: #b8a77e; font-size: 12px; }
+.hand-description { margin: 10px 0 0; font-size: 11px; color: var(--muted); line-height: 1.6; }
+.hand-dialog { max-width: 1140px; width: calc(100% - 48px); padding: 35px; }
+.hand-dialog h2 { margin-bottom: 10px; }
+.hand-dialog .dialog-close { position: sticky; top: 0; float: right; margin: -20px -18px 0 0; z-index: 2; background: #f7f3e9; }
+#hand-summary { color: var(--muted); margin: 0 0 23px; }
+.hand-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(170px,1fr)); gap: 20px; align-items: start; }
+.held-card { margin: 0 auto; width: 100%; max-width: 430px; border: 1px solid #baa574; border-radius: 5px; background: #f9f5e9; padding: 12px; text-align: center; }
+.held-card figcaption { font-family: var(--display); font-size: 21px; color: var(--gold); margin-bottom: 9px; }
+.held-card img { display: block; width: 100%; height: 320px; object-fit: contain; background: #ece7db; border: 1px solid #d2c7ad; }
+.held-card a { display: inline-block; margin-top: 9px; font-size: 11px; color: var(--muted); text-underline-offset: 3px; }
+.hand-dialog-note { color: var(--muted); font-size: 12px; text-align: center; margin: 23px 0 14px; }
+.hand-dialog-actions { display: flex; gap: 12px; justify-content: center; padding-top: 13px; border-top: 1px solid var(--line); }
+.reading-focus .deck-stage { width: min(76vw, max(140px, calc((100dvh - 365px) * .679))); }
+@media (max-width: 560px) { .hand-dialog { width: calc(100% - 24px); max-height: calc(100dvh - 24px); padding: 28px 20px; } .hand-grid { grid-template-columns: 1fr; gap: 18px; } .held-card img { height: min(60dvh,430px); } .hand-size-control select { min-height: 44px; } .hand-dialog h2 { font-size: 35px; } .hand-dialog-actions { flex-wrap: wrap; } }
