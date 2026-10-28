@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f4f1e8">
+  <meta name="theme-color" content="#0c1024">
   <meta name="description" content="A quiet space for personal tarot readings. Hold a question in mind, draw a card, and let your intuition guide the interpretation.">
   <title>Charot Reading — Personal Tarot Readings</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
@@ -11,18 +11,19 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="experience.css?v=20261028-6">
+  <link rel="stylesheet" href="experience.css?v=astral-4">
+  <link rel="stylesheet" href="astral.css?v=3">
   <script>document.documentElement.classList.add('is-entering');setTimeout(() => document.documentElement.classList.remove('is-entering'), 2600);</script>
-  <script type="module" src="app.js?v=20261028-6"></script>
+  <script type="module" src="app.js?v=astral-4"></script>
 </head>
 <body>
-  <div class="ambient-background" aria-hidden="true">
+  <div class="ambient-background" aria-hidden="true"><svg class="astral-stars" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" fill="#e8dcff"><circle cx="90" cy="140" r="1.3" opacity="0.6"/><circle cx="270" cy="70" r="1" opacity="0.7"/><circle cx="460" cy="180" r="1.8" opacity="0.5"/><circle cx="710" cy="60" r="1" opacity="0.5"/><circle cx="980" cy="190" r="1.2" opacity="0.8"/><circle cx="1240" cy="80" r="1.8" opacity="0.8"/><circle cx="1350" cy="320" r="1" opacity="0.5"/><circle cx="100" cy="650" r="1" opacity="0.6"/><circle cx="330" cy="730" r="1.4" opacity="0.7"/><circle cx="550" cy="470" r="1" opacity="0.5"/><circle cx="800" cy="760" r="1.8" opacity="0.6"/><circle cx="1160" cy="610" r="1" opacity="0.8"/><circle cx="1330" cy="800" r="1.4" opacity="0.7"/><circle cx="640" cy="270" r="1.4" opacity="0.5"/><circle cx="200" cy="400" r="0.8" opacity="0.6"/><circle cx="1120" cy="340" r="1.6" opacity="0.5"/><circle cx="910" cy="500" r="0.9" opacity="0.6"/></svg>
     <svg class="ambient-orbit orbit-one" viewBox="0 0 1000 1000"><g fill="none" stroke="currentColor"><circle cx="500" cy="500" r="390"/><circle cx="500" cy="500" r="420" stroke-dasharray="1 28"/><ellipse cx="500" cy="500" rx="440" ry="270" transform="rotate(-30 500 500)"/><circle cx="890" cy="500" r="5" fill="currentColor"/></g></svg>
     <svg class="ambient-orbit orbit-two" viewBox="0 0 1000 1000"><g fill="none" stroke="currentColor"><circle cx="500" cy="500" r="390"/><ellipse cx="500" cy="500" rx="430" ry="300" transform="rotate(25 500 500)"/><circle cx="110" cy="500" r="5" fill="currentColor"/></g></svg>
   </div>
   <div class="startup-scene" aria-hidden="true">
     <div class="startup-dial"><img src="assets/celestial-dial.svg" alt=""></div>
-    <div class="startup-deck"><img src="assets/oracle-back.svg" alt=""><img src="assets/oracle-back.svg" alt=""><img src="assets/oracle-back.svg" alt=""></div>
+    <div class="startup-deck"><img src="assets/astral-back.svg" alt=""><img src="assets/astral-back.svg" alt=""><img src="assets/astral-back.svg" alt=""></div>
     <div class="startup-caption"><span>Charot Reading</span><p>A moment to settle in.</p></div>
   </div>
   <svg class="icon-library" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
@@ -60,7 +61,7 @@
       </div>
 
       <div class="reading-space">
-        <button class="fullscreen-button" id="fullscreen-button" aria-label="Enter fullscreen" aria-pressed="false"><svg aria-hidden="true"><use href="#fullscreen-icon"/></svg><span>Fullscreen</span></button>
+        <div class="table-toolbar"><button class="fullscreen-button" id="fullscreen-button" aria-label="Enter fullscreen" aria-pressed="false"><svg aria-hidden="true"><use href="#fullscreen-icon"/></svg><span>Fullscreen</span></button></div>
         <div class="card-table">
           <img class="celestial-dial" src="assets/celestial-dial.svg" alt="" aria-hidden="true">
           <div class="deck-stage" id="deck-stage" aria-busy="true">
@@ -69,7 +70,7 @@
             <div class="deck-under under-one" aria-hidden="true"></div>
             <div class="card-tilt" id="card-tilt">
             <div class="card" id="card" data-face="back">
-              <div class="card-back" id="card-back"><img src="assets/oracle-back.svg" alt="An engraved sun and crescent moon within a botanical gold border" draggable="false"></div>
+              <div class="card-back" id="card-back"><img src="assets/astral-back.svg" alt="An engraved sun and crescent moon within a botanical gold border" draggable="false"></div>
               <div class="card-front" id="card-front" aria-hidden="true">
                 <div class="card-caption"><svg aria-hidden="true"><use href="#star-icon"/></svg><span id="card-number"></span><svg aria-hidden="true"><use href="#star-icon"/></svg></div>
                 <div class="card-image-wrap"><img id="card-image" alt="" decoding="async"></div>
@@ -99,7 +100,7 @@
     </section>
   </main>
 
-  <footer class="site-footer"><span>A quiet space for intuition.</span><span class="footer-ornament" aria-hidden="true">✧</span><div class="footer-actions"><button id="motion-toggle" aria-pressed="false" title="Pause decorative animations">Pause motion</button><button id="reset-button" title="Clear past draw history without releasing the current hand" disabled>Reset history</button><button id="credits-button" aria-haspopup="dialog">The collection</button></div></footer>
+  <footer class="site-footer"><span>A quiet space for intuition.</span><span class="footer-ornament" aria-hidden="true">✧</span><div class="footer-actions"><button id="reset-button" title="Clear past draw history without releasing the current hand" disabled>Reset history</button><button id="credits-button" aria-haspopup="dialog">The collection</button></div></footer>
 
   <dialog id="help-dialog" aria-labelledby="help-title">
     <button class="dialog-close" aria-label="Close reading guide"><svg aria-hidden="true"><use href="#clear-icon"/></svg></button>
@@ -108,7 +109,6 @@
     <ol><li><strong>Set an intention.</strong> Bring a question, a feeling, or a situation into focus.</li><li><strong>Choose your hand.</strong> Select a single card, three cards, or five cards, then draw.</li><li><strong>Open Cards in hand.</strong> Read the images together. The interpretation is yours.</li></ol>
     <p>Your hand stays saved until you select <strong>Next reading</strong>. Clear hides the displayed single card; Shuffle rearranges the unseen deck. Neither releases your hand.</p>
     <p><strong>Reset history</strong> in the footer restores the unheld cards. Your current hand stays reserved until Next reading.</p>
-    <p class="dialog-footnote">This site uses Google Analytics and analytics cookies to measure visits and feature usage. Reading events include only hand size and card position, without card images or contact details.</p>
     <p class="dialog-footnote">Cards appear once per cycle. A new cycle begins after the entire collection has been drawn. Your place is saved in this browser when storage is available.</p>
   </dialog>
   <dialog id="credits-dialog" aria-labelledby="credits-title">

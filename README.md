@@ -25,10 +25,10 @@ Deck progress is stored in this browser's localStorage. Clearing a card and shuf
 
 To add or replace cards, update the manifest and the corresponding image files, then run asset validation. Appending new cards preserves held readings and draw history, shuffling the additions into the unseen deck. Removing or reordering existing cards starts a fresh round to keep saved progress consistent.
 
-The header coffee button reuses the One ODC support QR and Hire me contact. Page loads feature a 2.6-second engraved-card scene; reduced motion skips it. The footer Pause motion control stops the decorative background and coffee loops. Static script URLs are versioned when their interfaces change to prevent mixing cached releases.
+The header coffee button reuses the One ODC support QR and Hire me contact. Page loads feature a 2.6-second engraved-card scene; reduced motion skips it. The sun logo rotates slowly; decorative loops stop in background tabs and respect reduced motion. Static script URLs are versioned when their interfaces change to prevent mixing cached releases.
 
 ## Analytics
 
-GA4 property `G-XE6T7Y5VCY` receives automatic page views and custom events: `draw_hand` (after a successful draw is saved), `open_hand`, `reveal_card` (first reveal only), `next_reading`, `open_support`, and `select_hire`. Reading parameters contain hand size and card position only; no image IDs, descriptions, contact email, or reading content are sent as custom parameters. Google Signals and advertising personalization signals are disabled. Localhost previews do not load the tag. Analytics loads asynchronously; blocking Google does not prevent readings. The Reading guide discloses analytics cookies.
+GA4 property `G-XE6T7Y5VCY` receives automatic page views and custom events: `draw_hand` (after a successful draw is saved), `open_hand`, `reveal_card` (first reveal only), `next_reading`, `open_support`, and `select_hire`. Reading parameters contain hand size and card position only; no image IDs, descriptions, contact email, or reading content are sent as custom parameters. Google Signals and advertising personalization signals are disabled. Localhost previews do not load the tag. Analytics loads asynchronously; blocking Google does not prevent readings.
 
 Use GA4 Realtime to confirm incoming traffic and events after publishing. Browser/ad blockers and cookie restrictions may reduce recorded traffic. Coffee support opens are not payment confirmations.

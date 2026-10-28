@@ -1,6 +1,6 @@
 import { track } from './analytics.js';
 import { Deck } from './deck.js?v=20261028-3';
-import { motion } from './motion.js?v=20261028-6';
+import { motion } from './motion.js?v=astral-4';
 
 const $ = id => document.getElementById(id);
 const storageKey = 'charot-readings-deck-v1';
@@ -145,7 +145,7 @@ function renderHand() {
       back.className = 'held-flip-back';
       back.setAttribute('aria-hidden', 'true');
       const engraving = document.createElement('img');
-      engraving.src = 'assets/oracle-back.svg';
+      engraving.src = 'assets/astral-back.svg';
       engraving.alt = '';
       engraving.draggable = false;
       back.append(engraving);
@@ -354,11 +354,6 @@ $('copy-email').addEventListener('click', async () => {
   } catch {
     $('copy-feedback').textContent = 'Couldn’t copy. Select the email address to copy it manually.';
   }
-});
-$('motion-toggle').addEventListener('click', () => {
-  const paused = document.body.classList.toggle('motion-paused');
-  $('motion-toggle').setAttribute('aria-pressed', String(paused));
-  $('motion-toggle').textContent = paused ? 'Resume motion' : 'Pause motion';
 });
 document.addEventListener('visibilitychange', () => document.body.classList.toggle('page-hidden', document.hidden));
 document.body.classList.toggle('page-hidden', document.hidden);

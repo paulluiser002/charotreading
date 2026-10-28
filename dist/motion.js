@@ -50,7 +50,7 @@ export const motion = {
       card.className = 'fan-card';
       card.style.transform = fanTransform(i, count);
       const image = document.createElement('img');
-      image.src = 'assets/oracle-back.svg';
+      image.src = 'assets/astral-back.svg';
       image.alt = '';
       image.draggable = false;
       card.append(image);
@@ -99,7 +99,7 @@ export const motion = {
     const shoe = document.createElement('div');
     shoe.className = 'dealer-shoe';
     const back = document.createElement('img');
-    back.src = 'assets/oracle-back.svg';
+    back.src = 'assets/astral-back.svg';
     back.alt = '';
     shoe.append(back);
     layer.append(shoe);
@@ -115,7 +115,7 @@ export const motion = {
         card.style.zIndex = String(count - i + 1);
         card.style.opacity = '0';
         const image = document.createElement('img');
-        image.src = 'assets/oracle-back.svg';
+        image.src = 'assets/astral-back.svg';
         image.alt = '';
         card.append(image);
         layer.append(card);
@@ -171,25 +171,49 @@ export const motion = {
   },
 
   async shuffle() {
-    await Promise.all([
-      play(document.querySelector('.under-one'), [
-        { transform: 'rotate(-3deg)' },
-        { transform: 'translate3d(-42px,-15px,25px) rotateY(-17deg) rotateZ(-13deg)', offset: .4 },
-        { transform: 'translate3d(18px,-3px,10px) rotateZ(5deg)', offset: .72 },
-        { transform: 'rotate(-3deg)' }
-      ], { duration: 1800 }),
-      play(document.querySelector('.under-two'), [
-        { transform: 'rotate(4deg)' },
-        { transform: 'translate3d(42px,-8px,18px) rotateY(17deg) rotateZ(14deg)', offset: .4 },
-        { transform: 'translate3d(-14px,-5px,8px) rotateZ(-5deg)', offset: .72 },
-        { transform: 'rotate(4deg)' }
-      ], { duration: 1800 }),
-      play($('card-tilt'), [
-        { transform: 'translateY(0)' },
-        { transform: 'translate3d(0,-25px,50px) rotateX(8deg) rotateZ(-4deg)', offset: .4 },
-        { transform: 'translateY(0)' }
-      ], { duration: 1800 })
-    ]);
+    if (preference.matches || document.hidden) return;
+    const stage = $('deck-stage');
+    const layer = $('deal-layer');
+    const cards = [];
+    const distance = stage.clientWidth * .28;
+    stage.classList.add('is-shuffling');
+    try {
+      for (let i = 0; i < 10; i++) {
+        const card = document.createElement('div');
+        card.className = 'shuffle-card';
+        layer.append(card);
+        cards.push(card);
+      }
+      const packets = cards.map((card, i) => {
+        const side = i < 5 ? -1 : 1;
+        const pose = `translate3d(${side * distance}px,-14px,${(i % 5) * 3}px) rotateZ(${side * 9}deg)`;
+        card.style.transform = pose;
+        return play(card, [
+          { transform: `translate3d(0,${i * -.6}px,${i * 2}px) rotateZ(0deg)` },
+          { transform: pose }
+        ], { duration: 280 });
+      });
+      await Promise.all(packets);
+      const order = [0,5,1,6,2,7,3,8,4,9];
+      await Promise.all(order.map((index, i) => {
+        const card = cards[index];
+        const from = card.style.transform;
+        const target = `translate3d(0,${-i * .8}px,${30 + i * 3}px) rotateZ(${i % 2 ? .6 : -.6}deg)`;
+        card.style.transform = target;
+        return play(card, [
+          { transform: from },
+          { transform: `translate3d(${index < 5 ? -18 : 18}px,-24px,${70 + i * 3}px) rotateZ(${index < 5 ? -3 : 3}deg)`, offset: .55 },
+          { transform: target }
+        ], { duration: 300, delay: i * 110, fill: 'backwards', easing: 'cubic-bezier(.3,.65,.3,1)' });
+      }));
+      await Promise.all(cards.map(card => play(card, [
+        { transform: card.style.transform },
+        { transform: 'translate3d(0,0,0) rotateZ(0deg)' }
+      ], { duration: 230 })));
+    } finally {
+      layer.replaceChildren();
+      stage.classList.remove('is-shuffling');
+    }
   },
 
   pulse() {
