@@ -1,6 +1,6 @@
 import { track } from './analytics.js';
 import { Deck } from './deck.js?v=20261028-3';
-import { motion } from './motion.js';
+import { motion } from './motion.js?v=20261028-6';
 
 const $ = id => document.getElementById(id);
 const storageKey = 'charot-readings-deck-v1';

@@ -354,3 +354,9 @@ body { isolation: isolate; }
 .held-flip + .held-flip-hint + a { margin-top: 2px; }
 @media (max-width: 560px) { .held-flip { max-height: 56dvh; width: min(100%, calc(56dvh * .679)); margin: auto; } }
 @media (prefers-reduced-motion: reduce) { .held-flip-inner { transition: none; } }
+
+@property --badge-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+.fan-label::before { content: ''; position: absolute; inset: -2px; border: 2px solid transparent; border-radius: inherit; background: conic-gradient(from var(--badge-angle), transparent 55%, #aebbf3 72%, #f1d697 83%, #fff8e0 88%, transparent 98%) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude; animation: badge-shine 3s linear infinite; pointer-events: none; }
+@keyframes badge-shine { to { --badge-angle: 360deg; } }
+.motion-paused .fan-label::before, .page-hidden .fan-label::before { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .fan-label::before { animation: none; } }

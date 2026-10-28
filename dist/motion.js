@@ -177,18 +177,18 @@ export const motion = {
         { transform: 'translate3d(-42px,-15px,25px) rotateY(-17deg) rotateZ(-13deg)', offset: .4 },
         { transform: 'translate3d(18px,-3px,10px) rotateZ(5deg)', offset: .72 },
         { transform: 'rotate(-3deg)' }
-      ], { duration: 650 }),
+      ], { duration: 1800 }),
       play(document.querySelector('.under-two'), [
         { transform: 'rotate(4deg)' },
         { transform: 'translate3d(42px,-8px,18px) rotateY(17deg) rotateZ(14deg)', offset: .4 },
         { transform: 'translate3d(-14px,-5px,8px) rotateZ(-5deg)', offset: .72 },
         { transform: 'rotate(4deg)' }
-      ], { duration: 650 }),
+      ], { duration: 1800 }),
       play($('card-tilt'), [
         { transform: 'translateY(0)' },
         { transform: 'translate3d(0,-25px,50px) rotateX(8deg) rotateZ(-4deg)', offset: .4 },
         { transform: 'translateY(0)' }
-      ], { duration: 650 })
+      ], { duration: 1800 })
     ]);
   },
 
