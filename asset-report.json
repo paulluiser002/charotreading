@@ -1,0 +1,36 @@
+{
+  "downloaded_candidates": 243,
+  "content_filter_exclusions": 36,
+  "exact_and_perceptual_duplicates_removed": [
+    {
+      "removed_index": 55,
+      "duplicate_of_index": 0,
+      "id": "926736350f87180852a79c798be8b81f"
+    },
+    {
+      "removed_index": 125,
+      "duplicate_of_index": 122,
+      "id": "a376d0cf2ed11c1bc48ae7503d2c00ae"
+    },
+    {
+      "removed_index": 242,
+      "duplicate_of_index": 0,
+      "id": "198498a9974c17348ea9535b1dddba16"
+    }
+  ],
+  "final_count": 204,
+  "bytes": 8794082,
+  "dedupe_methods": [
+    "Pinterest image filename/content ID deduplication before download",
+    "SHA-256 of optimized image bytes",
+    "64-bit difference hash <=5 and average hash <=6, with aspect ratio within 13%",
+    "Visual contact-sheet inspection to remove obvious repeated photographic compositions and unrelated items"
+  ],
+  "provenance": "Every selected image has a Pinterest page or board URL. Images downloaded from Pinterest pinimg CDN. Five candidate images came directly from original user board.",
+  "limitations": [
+    "Pinterest boards expose only a small anonymous preview and some show sign-in gates; bulk pool therefore uses publicly indexed Pinterest images discovered by image search.",
+    "Perceptual hashes reduce near duplicates but cannot guarantee that every crop, caption variation, or reupload has been caught.",
+    "Some memes contain mild profanity or insulting language. Explicit sexual and obviously unsuitable material removed during visual review.",
+    "Source links preserve provenance; image creator identities and reuse licenses are not verified."
+  ]
+}
