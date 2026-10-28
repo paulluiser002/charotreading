@@ -150,7 +150,7 @@ function loadImage(src) {
 
 async function draw() {
   if (busy || !deck) return;
-  // Only commit a draw after its image loads, so a failed request never consumes a card.
+  // Commit only after every image loads, so a failed request never consumes part of a hand.
   const draft = new Deck(cards.map(card => card.id), deck.snapshot());
   const result = draft.drawHand(deck.handSize);
   setBusy(true, true);
@@ -210,7 +210,7 @@ $('clear-button').addEventListener('click', async () => {
   save();
   render();
   await animate([{ opacity: 0 }, { opacity: 1 }], 180);
-  status('Your card has been cleared. Draw when you are ready.');
+  status('Card hidden. It is still saved in Cards in hand.');
   setBusy(false);
 });
 
