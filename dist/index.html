@@ -3,115 +3,101 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f1eafa">
-  <meta name="description" content="Isip ng tanong. Draw a Filipino meme card. A little guidance, a lot of kalokohan. No repeats until the whole deck is drawn.">
-  <title>Charot Readings — Anong say ng universe?</title>
+  <meta name="theme-color" content="#f4f1e8">
+  <meta name="description" content="A quiet space for personal tarot readings. Hold a question in mind, draw a card, and let your intuition guide the interpretation.">
+  <title>The Quiet Oracle — Personal Tarot Readings</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script type="module" src="app.js"></script>
 </head>
 <body>
   <svg class="icon-library" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-    <symbol id="sparkle" viewBox="0 0 24 24"><path d="M12 2c0 7-3 10-10 10 7 0 10 3 10 10 0-7 3-10 10-10-7 0-10-3-10-10Z"/></symbol>
+    <symbol id="star-icon" viewBox="0 0 24 24"><path d="m12 2 2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4Z"/></symbol>
     <symbol id="shuffle-icon" viewBox="0 0 24 24"><path d="m16 3 4 4-4 4M4 7h3c5 0 5 10 10 10h3M16 13l4 4-4 4M4 17h3c2.5 0 3.7-2.5 5-5s2.5-5 5-5h3"/></symbol>
     <symbol id="clear-icon" viewBox="0 0 24 24"><path d="m7 7 10 10M7 17 17 7"/></symbol>
     <symbol id="external-icon" viewBox="0 0 24 24"><path d="M14 4h6v6m0-6L10 14M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></symbol>
+    <symbol id="moon-icon" viewBox="0 0 24 24"><path d="M19.5 15A8.5 8.5 0 0 1 9 4.5 8.5 8.5 0 1 0 19.5 15Z"/></symbol>
   </svg>
+
   <header class="site-header">
-    <a class="wordmark" href="./" aria-label="Charot Readings home"><svg class="brand-spark" aria-hidden="true"><use href="#sparkle"/></svg>charot<span>.</span><span class="wordmark-small">readings</span></a>
-    <span class="header-note">A little guidance. A lot of kalokohan.</span>
-    <button class="help-button" id="help-button" aria-label="How to play" aria-haspopup="dialog">?</button>
+    <a class="wordmark" href="./" aria-label="The Quiet Oracle home">
+      <svg viewBox="0 0 56 56" aria-hidden="true"><g fill="none" stroke="currentColor"><circle cx="28" cy="28" r="12"/><circle cx="28" cy="28" r="8"/><path d="M28 1v10m0 34v10M1 28h10m34 0h10M9 9l8 8m22 22 8 8M9 47l8-8m22-22 8-8M17 2l4 11m14 30 4 11M2 17l11 4m30 14 11 4M2 39l11-4m30-14 11-4M17 54l4-11M35 13l4-11"/></g></svg>
+      <span>The Quiet Oracle</span>
+    </a>
+    <span class="header-note">The art of looking within</span>
+    <button class="guide-button" id="help-button" aria-haspopup="dialog">Reading guide <span aria-hidden="true">↗</span></button>
   </header>
 
   <main>
     <section class="reading" aria-labelledby="page-title">
       <div class="intro">
-        <p class="intro-note"><svg aria-hidden="true"><use href="#sparkle"/></svg> The universe has receipts.</p>
-        <h1 id="page-title">Anong say ng universe?</h1>
-        <p class="subtitle">Isip ng tanong. Draw a card. ’Wag masyadong personalin.</p>
+        <p class="intro-note"><span class="small-rule"></span> A personal tarot reading</p>
+        <h1 id="page-title">A moment<br> of clarity.</h1>
+        <p class="subtitle">Hold a question in mind. Draw a card.<br>Let your intuition reveal what speaks to you.</p>
+        <div class="intention-note">
+          <svg aria-hidden="true"><use href="#star-icon"/></svg>
+          <div><h2>Begin with an intention</h2><p>Take a slow breath. Settle into the present.<br>When you feel ready, let a card find you.</p></div>
+        </div>
+        <div class="collection-note"><svg aria-hidden="true"><use href="#moon-icon"/></svg><p>A collection of <strong id="pool-count">image cards</strong><span>Each image is an invitation to reflect.</span></p></div>
       </div>
 
-      <div class="card-table">
-        <aside class="table-note note-left" aria-hidden="true">
-          <p>Take a breath.<br>Think of a question.<br>Or your ex. Your call.</p>
-          <svg viewBox="0 0 100 65"><path d="M6 9c-8 38 42 53 79 26m-20-3 23 1-9 21"/></svg>
-        </aside>
-
-        <div class="deck-stage" id="deck-stage" aria-busy="true">
-          <div class="deck-shadow" aria-hidden="true"></div>
-          <div class="deck-under under-two" aria-hidden="true"></div>
-          <div class="deck-under under-one" aria-hidden="true"></div>
-          <div class="card" id="card">
-            <div class="card-back" id="card-back">
-              <span class="back-corner corner-top" aria-hidden="true">✦</span>
-              <span class="back-corner corner-bottom" aria-hidden="true">✦</span>
-              <div class="back-inner">
-                <span class="back-top">Your daily dose of</span>
-                <svg class="eye-art" viewBox="0 0 200 150" aria-hidden="true">
-                  <g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                    <path d="M24 77Q100-6 176 77 100 160 24 77Z"/>
-                    <ellipse cx="100" cy="77" rx="31" ry="34"/>
-                    <path d="m100 8 0-7M66 17l-4-9M38 35l-8-6M134 17l4-9M162 35l8-6M100 144v-7M66 137l-4 9M134 137l4 9"/>
-                  </g>
-                  <path fill="currentColor" d="M100 54c0 15-6 23-20 23 14 0 20 8 20 23 0-15 6-23 20-23-14 0-20-8-20-23Z"/>
-                </svg>
-                <strong>charot.</strong>
-                <span class="back-bottom">Trust the memes.</span>
+      <div class="reading-space">
+        <div class="card-table">
+          <img class="celestial-dial" src="assets/celestial-dial.svg" alt="" aria-hidden="true">
+          <div class="deck-stage" id="deck-stage" aria-busy="true">
+            <div class="deck-shadow" aria-hidden="true"></div>
+            <div class="deck-under under-two" aria-hidden="true"></div>
+            <div class="deck-under under-one" aria-hidden="true"></div>
+            <div class="card" id="card">
+              <div class="card-back" id="card-back"><img src="assets/oracle-back.svg" alt="An engraved sun and crescent moon within a botanical gold border" draggable="false"></div>
+              <div class="card-front" id="card-front" hidden>
+                <div class="card-caption"><svg aria-hidden="true"><use href="#star-icon"/></svg><span id="card-number"></span><svg aria-hidden="true"><use href="#star-icon"/></svg></div>
+                <div class="card-image-wrap"><img id="card-image" alt="" decoding="async"></div>
+                <div class="card-signature"><span></span><svg aria-hidden="true"><use href="#star-icon"/></svg><span></span></div>
               </div>
+              <div class="card-loading" id="card-loading" hidden><span class="spinner" aria-hidden="true"></span><span>Drawing your card…</span></div>
             </div>
-            <div class="card-front" id="card-front" hidden>
-              <div class="card-caption"><span>Ang sagot ng universe</span><span id="card-number"></span></div>
-              <div class="meme-image-wrap"><img id="meme-image" alt="" decoding="async"></div>
-              <div class="card-signature">Take what resonates. Charot.<svg aria-hidden="true"><use href="#sparkle"/></svg></div>
-            </div>
-            <div class="card-loading" id="card-loading" hidden><span class="spinner" aria-hidden="true"></span><span>Consulting the memes…</span></div>
           </div>
         </div>
 
-        <aside class="table-note note-right" aria-hidden="true">
-          <svg class="note-star"><use href="#sparkle"/></svg>
-          <p><strong id="pool-count">A whole lot of</strong><br>Pinoy meme energy.</p>
-          <span class="no-repeat-sticker">No repeats.<br>Promise, mhie.</span>
-        </aside>
-      </div>
-
-      <div class="reading-controls">
-        <p class="status" id="status" role="status" aria-live="polite">Getting the cards ready…</p>
-        <div class="actions">
-          <button class="button button-secondary" id="shuffle-button" aria-label="Shuffle deck" disabled><svg aria-hidden="true"><use href="#shuffle-icon"/></svg><span>Shuffle<span class="button-detail"> deck</span></span></button>
-          <button class="button button-primary" id="draw-button" disabled><svg aria-hidden="true"><use href="#sparkle"/></svg><span>Draw a card</span></button>
-          <button class="button button-clear" id="clear-button" aria-label="Clear card" disabled><svg aria-hidden="true"><use href="#clear-icon"/></svg><span>Clear<span class="button-detail"> card</span></span></button>
+        <div class="reading-controls">
+          <p class="status" id="status" role="status" aria-live="polite">Preparing your reading…</p>
+          <div class="actions">
+            <button class="button button-secondary" id="shuffle-button" aria-label="Shuffle deck" disabled><svg aria-hidden="true"><use href="#shuffle-icon"/></svg><span>Shuffle</span></button>
+            <button class="button button-primary" id="draw-button" disabled><svg aria-hidden="true"><use href="#star-icon"/></svg><span>Draw a card</span></button>
+            <button class="button button-clear" id="clear-button" aria-label="Clear card" disabled><svg aria-hidden="true"><use href="#clear-icon"/></svg><span>Clear</span></button>
+          </div>
+          <div class="deck-progress" id="deck-progress" hidden>
+            <div class="progress-labels"><span><strong id="remaining-count">0</strong> cards remaining</span><span id="drawn-count">0 drawn</span></div>
+            <div class="progress-track" role="progressbar" aria-label="Cards drawn this cycle" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0" id="progress-bar"><div id="progress-fill"></div></div>
+          </div>
+          <a id="pin-link" class="pin-link" href="https://ph.pinterest.com/arabellara4444/charot-cards/" target="_blank" rel="noopener noreferrer" hidden>Image source <svg aria-hidden="true"><use href="#external-icon"/></svg></a>
         </div>
-        <div class="deck-progress" id="deck-progress" hidden>
-          <div class="progress-labels"><span><strong id="remaining-count">0</strong> cards left in this round</span><span id="drawn-count">0 drawn</span></div>
-          <div class="progress-track" role="progressbar" aria-label="Cards drawn this round" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0" id="progress-bar"><div id="progress-fill"></div></div>
-        </div>
-        <a id="pin-link" class="pin-link" href="https://ph.pinterest.com/arabellara4444/charot-cards/" target="_blank" rel="noopener noreferrer" hidden>View Pinterest source <svg aria-hidden="true"><use href="#external-icon"/></svg></a>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer"><span>For fun, for the plot, for you.</span><button id="credits-button" aria-haspopup="dialog">The meme sources <span aria-hidden="true">↗</span></button></footer>
+  <footer class="site-footer"><span>A quiet space for intuition.</span><span class="footer-ornament" aria-hidden="true">✧</span><button id="credits-button" aria-haspopup="dialog">The collection</button></footer>
 
   <dialog id="help-dialog" aria-labelledby="help-title">
-    <button class="dialog-close" aria-label="Close how to play">×</button>
-    <p class="dialog-kicker">No powers required</p>
-    <h2 id="help-title">Let the memes speak.</h2>
-    <ol><li>Think of a question. About love, life, or bakit ka ganyan.</li><li>Tap <strong>Draw a card</strong>. The meme is your message—interpret it however you like.</li><li>Draw again, shuffle the remaining deck, or clear your card.</li></ol>
-    <p>Every card appears once per round. When you’ve seen the whole deck, a fresh round starts automatically. Your progress stays in this browser when you refresh.</p>
-    <p class="dialog-footnote">Just for entertainment, mhie. You’re still in charge of your life.</p>
+    <button class="dialog-close" aria-label="Close reading guide">×</button>
+    <p class="dialog-kicker">The practice</p>
+    <h2 id="help-title">Let the image speak.</h2>
+    <ol><li><strong>Set an intention.</strong> Bring a question, a feeling, or a situation into focus.</li><li><strong>Draw a card.</strong> Notice the expressions, gestures, and details that first catch your attention.</li><li><strong>Reflect.</strong> Consider how the image relates to your question. The interpretation is yours.</li></ol>
+    <p>Draw again to explore another perspective. Shuffle rearranges the remaining deck. Clear returns the current card to its resting state without restoring it to the deck.</p>
+    <p class="dialog-footnote">Cards appear once per cycle. A new cycle begins after the entire collection has been drawn. Your place is saved in this browser when storage is available.</p>
   </dialog>
   <dialog id="credits-dialog" aria-labelledby="credits-title">
-    <button class="dialog-close" aria-label="Close meme sources">×</button>
-    <p class="dialog-kicker">Credit where it’s due</p>
-    <h2 id="credits-title">Made of internet energy.</h2>
-    <p id="credits-summary">Filipino memes collected from public Pinterest pins.</p>
-    <p>Inspired by <a href="https://ph.pinterest.com/arabellara4444/charot-cards/" target="_blank" rel="noopener noreferrer">ara bella’s Charot Cards board</a>. Each drawn card links to its Pinterest source. Images belong to their respective creators; Pinterest is a source, not a claim of ownership.</p>
+    <button class="dialog-close" aria-label="Close collection details">×</button>
+    <p class="dialog-kicker">The image archive</p>
+    <h2 id="credits-title">The collection</h2>
+    <p id="credits-summary">Photographic cards selected for intuitive interpretation.</p>
+    <p>The collection draws from expressive photography and shared visual culture. Each card links to its Pinterest source, with images credited to their respective creators.</p>
     <div class="source-list" id="source-list"></div>
-    <p class="dialog-footnote">An independent meme deck, with no affiliation to Pinterest or the Charot Readings podcast.</p>
+    <p class="dialog-footnote">The images are presented without assigned meanings. Your perspective shapes each reading.</p>
   </dialog>
 </body>
 </html>

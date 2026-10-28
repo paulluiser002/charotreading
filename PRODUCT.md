@@ -1,4 +1,4 @@
-# Charot Readings
+# The Quiet Oracle
 
 <!-- impeccable:product-schema 1 -->
 
@@ -8,20 +8,26 @@ web
 
 ## Purpose
 
-A mobile responsive, login-free website for drawing random Filipino meme photos as playful tarot-style cards. The image supplies the interpretation. No generated readings or user accounts.
+A mobile responsive, login-free site for professional tarot-style readings through expressive photography. The human reader supplies each interpretation. The interface uses English exclusively and presents a formal, sincere reading experience.
 
 ## Capabilities and constraints
 
-- At least 200 distinct Pinterest-sourced meme images, including the supplied Charot Cards board where publicly available.
-- Draw one card, shuffle the remaining deck, clear the displayed card.
-- Do not repeat cards until a full round is exhausted. Retain progress on refresh using browser storage where available.
-- Simple loading and card transitions; honor reduced-motion preferences.
-- Show image provenance. Do not imply Pinterest is the image owner.
+- Maintain at least 200 distinct Pinterest-sourced images.
+- Prioritize captionless expressive photographs, candid reactions and Filipino screen moments, as seen in the user's Chrome reference board.
+- Exclude quote graphics, text-heavy panels and large overlaid jokes. Small natural subtitles or logos may remain inside photographs.
+- No references to memes, comedy or playful novelty in the interface, metadata or image descriptions.
+- Draw one card, shuffle the remaining deck, clear the current card. Avoid repeats until the complete collection is drawn.
+- Save progress in browser storage. Retain keyboard access, responsive layouts and reduced-motion support.
+- Keep source attribution accessible without intruding on the reading.
 
 ## Stack
 
-Builder choice: static HTML, CSS, and browser JavaScript. No runtime dependencies or backend are needed. The user delegated implementation choices by replying “Just build it.”
+Static HTML, CSS and browser JavaScript, with no runtime dependencies or backend. Preserve the existing deployment and public access.
 
-## Audience
+## Design authority
 
-People familiar with Filipino memes, enjoying humorous readings alone or with friends.
+The user requested a complete professional tarot redesign and English copy after the first release. Their current Chrome tab is the source image reference: https://ph.pinterest.com/arabellara4444/charot-cards/.
+
+## Builder choices
+
+The Quiet Oracle is the English-facing identity; the existing site address remains unchanged. Original vector sun-and-moon engraving replaces the playful card-back illustration.

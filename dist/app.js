@@ -39,14 +39,14 @@ function render() {
   $('card-front').hidden = !current;
   $('pin-link').hidden = !current;
   if (current) {
-    const image = $('meme-image');
+    const image = $('card-image');
     if (image.getAttribute('src') !== current.image) image.src = current.image;
     image.alt = current.alt;
-    $('card-number').textContent = `#${String(cards.indexOf(current) + 1).padStart(3, '0')}`;
+    $('card-number').textContent = `Card ${String(cards.indexOf(current) + 1).padStart(3, '0')}`;
     $('pin-link').href = current.source;
   } else {
-    $('meme-image').removeAttribute('src');
-    $('meme-image').alt = '';
+    $('card-image').removeAttribute('src');
+    $('card-image').alt = '';
   }
   const drawn = cards.length - deck.remaining.length;
   $('remaining-count').textContent = deck.remaining.length;
@@ -83,7 +83,7 @@ async function draw() {
   const draft = new Deck(cards.map(card => card.id), deck.snapshot());
   const result = draft.draw();
   setBusy(true, true);
-  status('Sandali, may chismis ang universe…');
+  status('Drawing your card…');
   try {
     await loadImage(byId.get(result.id).image);
     await animate([{ transform: 'rotate(0)', opacity: 1 }, { transform: 'translateY(-9px) rotate(-4deg) scale(.97)', opacity: 0 }], 140);
@@ -92,7 +92,7 @@ async function draw() {
     render();
     $('card-loading').hidden = true;
     await animate([{ transform: 'rotateY(-65deg) rotate(-3deg)', opacity: 0 }, { transform: 'rotateY(0) rotate(0)', opacity: 1 }], 340);
-    status(!canSave ? 'Card drawn. Progress can’t be saved in this browser.' : result.newRound ? 'Whole deck seen! Fresh round, fresh kalokohan.' : 'May tinamaan ba? The universe said what it said.');
+    status(!canSave ? 'Card drawn. Progress can’t be saved in this browser.' : result.newRound ? 'A new cycle begins. Take a moment to set your intention.' : 'Take your time. Let the image speak to you.');
   } catch {
     status('This card couldn’t load. Tap Draw a card to try again.', true);
   } finally {
@@ -107,7 +107,7 @@ $('shuffle-button').addEventListener('click', async () => {
   deck.shuffle();
   save();
   await animate([{ transform: 'translateX(0) rotate(0)' }, { transform: 'translateX(-12px) rotate(-5deg)', offset: .3 }, { transform: 'translateX(12px) rotate(5deg)', offset: .65 }, { transform: 'translateX(0) rotate(0)' }], 380);
-  status('Deck shuffled. Same question, new energy.');
+  status('The remaining cards have been shuffled.');
   setBusy(false);
 });
 $('clear-button').addEventListener('click', async () => {
@@ -118,7 +118,7 @@ $('clear-button').addEventListener('click', async () => {
   save();
   render();
   await animate([{ opacity: 0 }, { opacity: 1 }], 180);
-  status('Clean slate. Your next plot twist is one draw away.');
+  status('Your card has been cleared. Draw when you are ready.');
   setBusy(false);
 });
 
@@ -134,7 +134,7 @@ for (const [button, dialog] of [['help-button', 'help-dialog'], ['credits-button
 
 async function init() {
   try {
-    const response = await fetch('cards.json', { signal: AbortSignal.timeout(15000) });
+    const response = await fetch('cards.json', { cache: 'no-cache', signal: AbortSignal.timeout(15000) });
     if (!response.ok) throw new Error('Deck unavailable.');
     const data = await response.json();
     if (!Array.isArray(data) || !data.length) throw new Error('Empty deck.');
@@ -149,8 +149,8 @@ async function init() {
     });
     byId = new Map(cards.map(card => [card.id, card]));
     deck = new Deck([...ids], savedProgress());
-    $('pool-count').textContent = `${cards.length} cards of`;
-    $('credits-summary').textContent = `${cards.length} distinct meme images, collected from public Pinterest pins. Every card has a source link.`;
+    $('pool-count').textContent = `${cards.length} cards`;
+    $('credits-summary').textContent = `${cards.length} photographic cards, selected for intuitive interpretation. Each image is linked to its source.`;
     const sources = new Map();
     for (const card of cards) {
       if (!sources.has(card.source)) sources.set(card.source, card.alt);
@@ -168,7 +168,7 @@ async function init() {
     $('source-list').replaceChildren(fragment);
     render();
     if (deck.current) await loadImage(byId.get(deck.current).image);
-    status(deck.current ? 'Welcome back. The universe kept your place.' : 'Your next plot twist is one draw away.');
+    status(deck.current ? 'Welcome back. Your reading is as you left it.' : 'Take a breath. Draw when you are ready.');
     setBusy(false);
   } catch {
     status('The deck couldn’t load. Tap Retry to reconnect.', true);

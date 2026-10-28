@@ -1,6 +1,6 @@
-# Charot Readings
+# The Quiet Oracle
 
-A mobile responsive, login-free Filipino meme card deck. Draw one card, shuffle the remaining cards, or clear the current card. Each image links to its Pinterest source.
+A mobile responsive, login-free photographic tarot reading site. Draw one card, shuffle the remaining cards, or clear the current card. Each image links to its Pinterest source.
 
 ## Run
 
@@ -21,6 +21,6 @@ Deck progress is stored in this browser's localStorage. Clearing a card and shuf
 
 ## Images
 
-`dist/cards.json` contains card IDs, local image paths, descriptions, Pinterest sources, and content hashes. The images live in `dist/assets/cards/`. Assets are served locally so visitors do not need Pinterest access. Pinterest provenance does not establish image licensing; images remain their creators' work. See `asset-report.json` for collection and deduplication notes.
+`dist/cards.json` contains card IDs, local image paths, English descriptions, Pinterest sources, and content hashes. The images live in `dist/assets/cards/`. Assets are served locally so visitors do not need Pinterest access. Pinterest provenance does not establish image licensing; images remain their creators' work. See `asset-report.json` for collection and deduplication notes.
 
 To add or replace cards, update the manifest and the corresponding image files, then run asset validation. A changed card inventory starts a fresh round to keep saved progress consistent.

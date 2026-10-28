@@ -1,36 +1,61 @@
 {
-  "downloaded_candidates": 243,
-  "content_filter_exclusions": 36,
-  "exact_and_perceptual_duplicates_removed": [
+  "live_downloaded": 516,
+  "visual_exclusions": 300,
+  "prior_photo_candidates": 17,
+  "duplicates_removed": [
     {
-      "removed_index": 55,
-      "duplicate_of_index": 0,
-      "id": "926736350f87180852a79c798be8b81f"
+      "excluded": "prior-49",
+      "duplicate_of": "live-423",
+      "id": "d528dbec3aaf5f3897d26cfc2c4ada58"
     },
     {
-      "removed_index": 125,
-      "duplicate_of_index": 122,
-      "id": "a376d0cf2ed11c1bc48ae7503d2c00ae"
+      "excluded": "prior-106",
+      "duplicate_of": "live-164",
+      "id": "4914bb1fc4930236d76272572fc14199"
     },
     {
-      "removed_index": 242,
-      "duplicate_of_index": 0,
-      "id": "198498a9974c17348ea9535b1dddba16"
+      "excluded": "prior-184",
+      "duplicate_of": "live-194",
+      "id": "e5b5767109db5cf804584eda4f4ff972"
+    },
+    {
+      "excluded": "prior-238",
+      "duplicate_of": "live-1",
+      "id": "4b1b478e7fbff008a0d93e041e257212"
+    },
+    {
+      "excluded": "prior-239",
+      "duplicate_of": "live-12",
+      "id": "e1f93bb6bc2e5d2e17988409a6c07450"
     }
   ],
-  "final_count": 204,
-  "bytes": 8794082,
-  "dedupe_methods": [
-    "Pinterest image filename/content ID deduplication before download",
-    "SHA-256 of optimized image bytes",
-    "64-bit difference hash <=5 and average hash <=6, with aspect ratio within 13%",
-    "Visual contact-sheet inspection to remove obvious repeated photographic compositions and unrelated items"
+  "final_count": 228,
+  "bytes": 5196142,
+  "selection": "Each image visually inspected. Photo-led reactions, expressive faces, awkward scenes and funny animal photos; no quote panels, cartoon illustrations, text-heavy jokes or multi-panel collages. Small natural television subtitles, logos and occasional minor labels may remain.",
+  "provenance": "Every image downloaded from Pinterest pinimg CDN, with a Pinterest pin or board source URL. Live candidates captured from the reference board and related recommendations.",
+  "deduplication": [
+    "Pinterest image ID",
+    "SHA-256",
+    "Perceptual difference and average hashes with similar aspect ratios",
+    "Visual inspection of contact sheets"
   ],
-  "provenance": "Every selected image has a Pinterest page or board URL. Images downloaded from Pinterest pinimg CDN. Five candidate images came directly from original user board.",
   "limitations": [
-    "Pinterest boards expose only a small anonymous preview and some show sign-in gates; bulk pool therefore uses publicly indexed Pinterest images discovered by image search.",
-    "Perceptual hashes reduce near duplicates but cannot guarantee that every crop, caption variation, or reupload has been caught.",
-    "Some memes contain mild profanity or insulting language. Explicit sexual and obviously unsuitable material removed during visual review.",
-    "Source links preserve provenance; image creator identities and reuse licenses are not verified."
-  ]
+    "Pinterest source attribution does not verify creator identity or reuse license.",
+    "Perceptual checks cannot guarantee all reuploads or different crops have been found."
+  ],
+  "additional_visual_duplicate_crops_removed": [
+    "live-216",
+    "live-88",
+    "live-391",
+    "prior-54",
+    "prior-230"
+  ],
+  "verification": {
+    "valid_images": 228,
+    "unique_ids": 228,
+    "unique_sha256": 228,
+    "max_dimension": 720,
+    "all_sources_pinterest": true,
+    "alt_text_has_no_word_meme": true
+  }
 }
