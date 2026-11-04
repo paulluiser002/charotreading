@@ -102,13 +102,10 @@ function render() {
     $('card-image').removeAttribute('src');
     $('card-image').alt = '';
   }
-  $('hand-size').value = String(deck.handSize);
+  $('hand-size').querySelector(`[value="${deck.handSize}"]`).checked = true;
   $('draw-button').querySelector('span').textContent = deck.handSize === 1 ? 'Draw a card' : `Draw ${deck.handSize} cards`;
-  $('hand-count').textContent = deck.hand.length;
-  $('hand-button').setAttribute('aria-label', `Cards in hand (${deck.hand.length})`);
-  $('hand-description').textContent = deck.hand.length
-    ? 'Your cards are held until you select Next reading.'
-    : 'Choose your cards, then draw to begin.';
+  const handCount = deck.hand.length;
+  $('hand-count').textContent = handCount === 1 ? '1 card held' : `${handCount} cards held`;
   renderHand();
   if (!deck.hand.length && $('hand-dialog').open) $('hand-dialog').close();
 }
@@ -226,7 +223,7 @@ async function draw() {
     render();
     if (deck.handSize === 1) await Promise.all([motion.flip(true), motion.ready()]);
     else await motion.ready();
-    status(!canSave ? 'Hand drawn. Progress can’t be saved in this browser.' : 'Your hand is ready. Open Cards in hand to begin your interpretation.');
+    status(!canSave ? 'Hand drawn. Progress can’t be saved in this browser.' : '');
   } finally {
     motion.cleanupDeal();
     setBusy(false);
@@ -234,9 +231,9 @@ async function draw() {
 }
 
 $('draw-button').addEventListener('click', draw);
-$('hand-size').addEventListener('change', () => {
+$('hand-size').addEventListener('change', event => {
   if (busy || !deck || deck.hand.length) return;
-  deck.handSize = Number($('hand-size').value);
+  deck.handSize = Number(event.target.value);
   save();
   render();
 });
@@ -259,7 +256,7 @@ async function nextReading() {
     await motion.release();
     render();
     await motion.pulse();
-    status('Your hand has been released. Set an intention for your next reading.');
+    status('');
   } finally {
     setBusy(false);
   }
@@ -394,7 +391,7 @@ async function init() {
     $('source-list').replaceChildren(fragment);
     render();
     if (deck.current) await loadImage(byId.get(deck.current).image);
-    status(deck.hand.length ? 'Welcome back. Your cards are still in hand.' : 'Take a breath. Draw when you are ready.');
+    status('');
     setBusy(false);
   } catch {
     status('The deck couldn’t load. Tap Retry to reconnect.', true);
