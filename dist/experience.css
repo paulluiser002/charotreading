@@ -221,13 +221,16 @@
 }
 .coffee-qr {
   display: block;
-  width: 190px;
+  width: 256px;
   height: auto;
   max-width: 100%;
-  padding: 8px;
   border: 1px solid var(--border);
   border-radius: 10px;
   background: white;
+  image-rendering: pixelated;
+}
+.coffee-download {
+  text-decoration: none;
 }
 .coffee-donation p,
 .coffee-hire > p {

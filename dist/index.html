@@ -27,7 +27,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="experience.css?v=astral-4">
+  <link rel="stylesheet" href="experience.css?v=coffee-qr">
   <link rel="stylesheet" href="astral.css?v=3">
   <script>document.documentElement.classList.add('is-entering');setTimeout(() => document.documentElement.classList.remove('is-entering'), 2600);</script>
   <script type="module" src="app.js?v=astral-4"></script>
@@ -155,7 +155,12 @@
       <label><input type="radio" name="support-option" value="hire"><span><svg aria-hidden="true"><use href="#work-icon"/></svg>Hire me</span></label>
     </fieldset>
     <div class="coffee-content">
-      <div id="coffee-donation" class="coffee-donation"><img class="coffee-qr" src="assets/support/coffee-qr.png" alt="Donation QR code for buying a coffee" width="540" height="544"><p>Scan to buy me a coffee. Works on all e-wallets and digital banks. Thanks for your support!</p></div>
+      <div id="coffee-donation" class="coffee-donation">
+        <img class="coffee-qr" src="assets/support/charot-reading-qr.png" alt="QR Ph code for supporting Charot Reading" width="1568" height="1568">
+        <p>Scan with GCash, Maya, or another QR Ph app and enter your amount.</p>
+        <a class="button button-secondary coffee-download" href="assets/support/charot-reading-qr.png" download>Download QR</a>
+        <p>On the same phone, download the QR and upload it from your gallery in your app’s QR scanner.</p>
+      </div>
       <div id="coffee-hire" class="coffee-hire" hidden><p>Have a project in mind? Let’s work together.</p><div class="coffee-email"><input id="contact-email" aria-label="Contact email" readonly value="charotreading.biz@gmail.com"><button id="copy-email" class="button button-secondary" type="button"><svg aria-hidden="true"><use href="#copy-icon"/></svg><span>Copy Email</span></button></div><p id="copy-feedback" role="status" class="coffee-feedback"></p></div>
     </div>
   </dialog>
