@@ -1,5 +1,6 @@
+import { initializeDaily } from './daily.js?v=1';
 import { track } from './analytics.js';
-import { Deck } from './deck.js?v=20261028-3';
+import { Deck } from './deck.js?v=daily-1';
 import { motion } from './motion.js?v=astral-4';
 
 const $ = id => document.getElementById(id);
@@ -76,15 +77,22 @@ function setBusy(value, loading = false) {
   $('clear-button').disabled = value || !deck?.current;
   $('reset-button').disabled = value || !deck;
   $('hand-size').disabled = value || !deck || deck.hand.length > 0;
-  $('hand-button').disabled = value || !deck || !deck.hand.length;
   $('next-reading-button').disabled = value || !deck || !deck.hand.length;
   $('dialog-next-reading').disabled = value || !deck || !deck.hand.length;
-  $('hand-fan').disabled = value || !deck || deck.hand.length < 2;
+  $('hand-fan').disabled = value || !deck || !deck.hand.length;
   $('card-loading').hidden = !loading;
 }
 
 function render() {
   const current = byId.get(deck.current);
+  $('card-tilt').tabIndex = deck.hand.length === 1 ? 0 : -1;
+  if (deck.hand.length === 1) {
+    $('card-tilt').setAttribute('role', 'button');
+    $('card-tilt').setAttribute('aria-label', 'Open held card');
+  } else {
+    $('card-tilt').removeAttribute('role');
+    $('card-tilt').removeAttribute('aria-label');
+  }
   $('card').dataset.face = current ? 'front' : 'back';
   $('card-back').setAttribute('aria-hidden', String(Boolean(current)));
   $('card-front').setAttribute('aria-hidden', String(!current));
@@ -243,8 +251,14 @@ function openHand() {
     track('open_hand', { card_count: deck.handSize });
   }
 }
-$('hand-button').addEventListener('click', openHand);
 $('hand-fan').addEventListener('click', openHand);
+$('card-tilt').addEventListener('click', () => { if (deck?.hand.length === 1) openHand(); });
+$('card-tilt').addEventListener('keydown', event => {
+  if (deck?.hand.length === 1 && ['Enter', ' '].includes(event.key)) {
+    event.preventDefault();
+    openHand();
+  }
+});
 async function nextReading() {
   if (busy || !deck?.hand.length) return;
   setBusy(true);
@@ -304,7 +318,7 @@ $('reset-button').addEventListener('click', async () => {
   }
 });
 
-for (const [button, dialog] of [['help-button', 'help-dialog'], ['credits-button', 'credits-dialog'], ['hand-button', 'hand-dialog'], ['coffee-button', 'coffee-dialog']]) {
+for (const [button, dialog] of [['help-button', 'help-dialog'], ['credits-button', 'credits-dialog'], [null, 'hand-dialog'], ['coffee-button', 'coffee-dialog']]) {
   const element = $(dialog);
   if (dialog !== 'hand-dialog') $(button).addEventListener('click', () => {
     if (dialog === 'coffee-dialog') { resetCoffee(); track('open_support'); }
@@ -393,6 +407,14 @@ async function init() {
     if (deck.current) await loadImage(byId.get(deck.current).image);
     status('');
     setBusy(false);
+    initializeDaily({
+      cards, getDeck: () => deck, isBusy: () => busy,
+      refresh: () => {
+        if (canSave) deck = new Deck(cards.map(card => card.id), savedProgress());
+        return deck;
+      },
+      persist: () => { save(); render(); setBusy(false); },
+    });
   } catch {
     status('The deck couldn’t load. Tap Retry to reconnect.', true);
     $('draw-button').querySelector('span').textContent = 'Retry';

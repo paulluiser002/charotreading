@@ -28,6 +28,10 @@ export class Deck {
     this.handSize = valid ? handSize : 3;
     this.revealed = valid && Array.isArray(saved.revealed)
       ? [...new Set(saved.revealed.filter(id => this.hand.includes(id)))] : [];
+    this.daily = saved?.daily && typeof saved.daily.date === 'string'
+      && (saved.daily.id === null || this.ids.includes(saved.daily.id))
+      ? { ...saved.daily } : null;
+    if (this.daily?.id) this.remaining = this.remaining.filter(id => id !== this.daily.id);
     if (!valid || added.length) this.shuffle();
   }
 
@@ -51,6 +55,15 @@ export class Deck {
     this.current = this.remaining.pop();
     this.last = this.current;
     return { id: this.current, newRound };
+  }
+
+  claimDaily(date) {
+    if (this.daily?.date === date && this.daily.id) return this.daily.id;
+    const eligible = this.remaining.filter(id => !this.hand.includes(id) && id !== this.daily?.id);
+    const id = eligible.length ? eligible[Math.floor(this.random() * eligible.length)] : null;
+    this.daily = { date, id };
+    this.remaining = this.remaining.filter(candidate => candidate !== id);
+    return id;
   }
 
   clear() { this.current = null; }
@@ -87,13 +100,13 @@ export class Deck {
   }
 
   reset() {
-    this.remaining = this.ids.filter(id => !this.hand.includes(id));
+    this.remaining = this.ids.filter(id => !this.hand.includes(id) && id !== this.daily?.id);
     this.current = null;
     this.last = null;
     this.shuffle();
   }
 
   snapshot() {
-    return { ids: [...this.ids], remaining: [...this.remaining], current: this.current, last: this.last, hand: [...this.hand], handSize: this.handSize, revealed: [...this.revealed] };
+    return { ids: [...this.ids], remaining: [...this.remaining], current: this.current, last: this.last, hand: [...this.hand], handSize: this.handSize, revealed: [...this.revealed], daily: this.daily ? { ...this.daily } : null };
   }
 }
