@@ -12,9 +12,24 @@ export function initializeDaily({ cards, getDeck, isBusy, refresh, persist }) {
   const stage = document.getElementById('daily-stage');
   const source = document.getElementById('daily-source');
   let revealTimer;
+  let revealGeneration = 0;
   let opening = false;
   let openedDay;
   let openedId;
+
+  const particles = document.getElementById('daily-particles');
+  // Fixed trajectories avoid per-frame layout work and keep the burst repeatable.
+  for (let index = 0; index < 40; index++) {
+    const particle = document.createElement('i');
+    const angle = index * 2.39996;
+    const distance = 85 + (index % 7) * 19;
+    particle.className = index % 3 === 0 ? 'daily-shard' : 'daily-dust';
+    particle.style.setProperty('--flight-x', `${Math.cos(angle) * distance}px`);
+    particle.style.setProperty('--flight-y', `${Math.sin(angle) * distance}px`);
+    particle.style.setProperty('--shard-turn', `${index * 41}deg`);
+    particle.style.setProperty('--burst-delay', `${2.48 + (index % 5) * .015}s`);
+    particles.append(particle);
+  }
 
   function updateShine() {
     const daily = getDeck().daily;
@@ -23,6 +38,7 @@ export function initializeDaily({ cards, getDeck, isBusy, refresh, persist }) {
 
   function resetReveal() {
     clearTimeout(revealTimer);
+    revealGeneration++;
     stage.classList.remove('is-revealing', 'is-revealed');
     reveal.setAttribute('aria-label', 'Reveal daily card');
     dialog.querySelector('.daily-front').setAttribute('aria-hidden', 'true');
@@ -73,7 +89,9 @@ export function initializeDaily({ cards, getDeck, isBusy, refresh, persist }) {
     reveal.disabled = true;
     message.textContent = 'A moment of discovery…';
     stage.classList.add('is-revealing');
+    const generation = ++revealGeneration;
     const finish = () => {
+      if (generation !== revealGeneration || !dialog.open) return;
       stage.classList.add('is-revealed');
       const deck = refresh();
       deck.revealDaily(openedDay, openedId);
@@ -85,7 +103,19 @@ export function initializeDaily({ cards, getDeck, isBusy, refresh, persist }) {
       source.hidden = false;
     };
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) finish();
-    else revealTimer = setTimeout(finish, 3200);
+    else {
+      const animation = dialog.querySelector('.daily-flipper').getAnimations()[0];
+      if (animation) animation.finished.then(finish).catch(() => {});
+      else revealTimer = setTimeout(finish, 4000);
+    }
+  });
+
+  matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', event => {
+    if (event.matches && stage.classList.contains('is-revealing')) {
+      for (const animation of stage.getAnimations({ subtree: true })) {
+        try { animation.finish(); } catch { animation.cancel(); }
+      }
+    }
   });
 
   document.getElementById('daily-close').addEventListener('click', () => dialog.close());

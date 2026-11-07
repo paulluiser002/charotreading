@@ -1,5 +1,5 @@
 /* The support trigger keeps One ODC’s original pulse, steam and wiggle timings. */
-.coffee-trigger, .coffee-modal { --brand-gold: #d6a23f; --brand-selected: #eee4cd; --brand-link: #7d6538; --text-muted: var(--muted); --text: var(--ink); --border: var(--line); --surface: var(--paper); --surface-alt: #ebe5d8; }
+.coffee-trigger, .coffee-modal { --brand-gold: #d6a23f; --brand-selected: #eee4cd; --brand-link: #e2c691; --text-muted: var(--muted); --text: var(--ink); --border: var(--line); --surface: var(--paper); --surface-alt: #ebe5d8; }
 .coffee-trigger {
   display: grid;
   place-content: center;
@@ -325,7 +325,7 @@ body { isolation: isolate; }
 .startup-dial { position: absolute; width: min(88vw,540px); opacity: .28; animation: startup-dial 2600ms ease-out both; }
 .startup-dial img { display: block; width: 100%; height: auto; }
 .startup-deck { position: absolute; width: clamp(110px,24vw,155px); aspect-ratio: 277/408; margin-top: -65px; perspective: 1000px; transform-style: preserve-3d; }
-.startup-deck img { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 6px; backface-visibility: hidden; box-shadow: 0 12px 25px #263d332b; transform-origin: 50% 75%; animation: startup-center 2400ms cubic-bezier(.16,1,.3,1) both; }
+.startup-deck img { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 6px; backface-visibility: hidden; box-shadow: 0 12px 25px #6d55ad2b; transform-origin: 50% 75%; animation: startup-center 2400ms cubic-bezier(.16,1,.3,1) both; }
 .startup-deck img:first-child { animation-name: startup-left; }
 .startup-deck img:last-child { animation-name: startup-right; }
 .startup-caption { position: absolute; top: calc(50% + 115px); text-align: center; animation: startup-caption 2400ms ease-out both; }
@@ -346,9 +346,9 @@ body { isolation: isolate; }
 .held-flip { display: block; position: relative; width: 100%; aspect-ratio: 277 / 408; perspective: 1200px; border: 0; padding: 0; background: transparent; border-radius: 8px; cursor: pointer; }
 .held-flip-inner { display: block; position: absolute; inset: 0; transform-style: preserve-3d; transform: rotateY(0deg); transition: transform 750ms cubic-bezier(.16,1,.3,1); }
 .held-flip[data-revealed="true"] .held-flip-inner { transform: rotateY(180deg); }
-.held-flip-back, .held-flip-front { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 8px; backface-visibility: hidden; -webkit-backface-visibility: hidden; box-shadow: 0 7px 16px #263d3321; }
+.held-flip-back, .held-flip-front { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 8px; backface-visibility: hidden; -webkit-backface-visibility: hidden; box-shadow: 0 7px 16px #6d55ad21; }
 .held-flip-back { transform: translateZ(1px); }
-.held-flip-front { transform: rotateY(180deg) translateZ(1px); background: #ece7db; }
+.held-flip-front { transform: rotateY(180deg) translateZ(1px); background: #111427; }
 .held-card .held-flip img { width: 100%; height: 100%; max-height: none; border: 0; }
 .held-flip-back img { object-fit: fill; }
 .held-flip-front img { object-fit: contain; }
