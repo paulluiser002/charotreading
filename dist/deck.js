@@ -66,6 +66,10 @@ export class Deck {
     return id;
   }
 
+  revealDaily(date, id) {
+    if (this.daily?.date === date && this.daily.id === id) this.daily.revealed = true;
+  }
+
   clear() { this.current = null; }
 
   drawHand(size) {

@@ -44,3 +44,16 @@ test('old progress migrates and the next date claims a different eligible card',
   assert.equal(localDay(new Date(2026, 10, 6, 23, 59)), '2026-11-06');
   assert.equal(localDay(new Date(2026, 10, 7, 0, 0)), '2026-11-07');
 });
+
+test('daily reveal persists for today and resets on the next daily claim', () => {
+  const deck = new Deck(['a', 'b', 'c'], null, () => 0);
+  const id = deck.claimDaily('2026-11-06');
+  deck.revealDaily('2026-11-05', id);
+  assert.ok(!deck.daily.revealed);
+  deck.revealDaily('2026-11-06', id);
+  const restored = new Deck(deck.ids, deck.snapshot(), () => 0);
+  assert.equal(restored.daily.revealed, true);
+  assert.equal(restored.claimDaily('2026-11-06'), id);
+  restored.claimDaily('2026-11-07');
+  assert.ok(!restored.daily.revealed);
+});

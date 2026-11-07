@@ -304,3 +304,48 @@ dialog::backdrop { background: #060817b3; }
   right: max(16px, env(safe-area-inset-right));
   z-index: 40;
 }
+
+/* Shared line icons and outlined surfaces for the header utilities. */
+.header-tools .coffee-trigger.coffee-trigger.coffee-trigger,
+.header-tools .guide-button,
+.header-tools .fullscreen-button,
+.header-tools .daily-trigger {
+  background: #242039;
+  border: 1px solid #8a76ab77;
+  color: #e2c691;
+  box-shadow: none;
+}
+.header-tools .guide-button { width: 44px; min-width: 44px; padding: 0; border-radius: 50%; }
+.header-tools .guide-label { display: none; }
+.header-tools :is(.guide-button, .fullscreen-button, .daily-trigger) svg { width: 17px; height: 17px; stroke: currentColor; stroke-width: 1.5; }
+.header-tools .daily-trigger { position: relative; isolation: isolate; }
+.daily-trigger.daily-unrevealed::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  padding: 2px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--daily-angle), #77629833 0deg, #77629833 240deg, #d1aaff 285deg, #fff1c5 315deg, #77629833 360deg);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+  animation: daily-outline 3s linear infinite;
+}
+@property --daily-angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+@keyframes daily-outline { to { --daily-angle: 360deg; } }
+@media (prefers-reduced-motion: reduce) {
+  .daily-trigger.daily-unrevealed::after { animation: none; }
+}
+@media (max-width: 600px) {
+  .header-tools .guide-button { width: 28px; min-width: 28px; border: 0; background: transparent; }
+}
+@media (max-width: 600px) {
+  .site-header .wordmark { font-size: 17px; gap: 5px; }
+  .header-tools .guide-button { width: 40px; min-width: 40px; background: #242039; border: 1px solid #8a76ab77; }
+}
+@media (max-width: 389px) {
+  .site-header .wordmark span { display: none; }
+  .site-header .wordmark svg { width: 28px; height: 28px; }
+}

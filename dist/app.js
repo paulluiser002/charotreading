@@ -1,6 +1,6 @@
-import { initializeDaily } from './daily.js?v=1';
+import { initializeDaily } from './daily.js?v=2';
 import { track } from './analytics.js';
-import { Deck } from './deck.js?v=daily-1';
+import { Deck } from './deck.js?v=daily-2';
 import { motion } from './motion.js?v=astral-4';
 
 const $ = id => document.getElementById(id);

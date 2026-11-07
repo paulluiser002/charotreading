@@ -13,6 +13,13 @@ export function initializeDaily({ cards, getDeck, isBusy, refresh, persist }) {
   const source = document.getElementById('daily-source');
   let revealTimer;
   let opening = false;
+  let openedDay;
+  let openedId;
+
+  function updateShine() {
+    const daily = getDeck().daily;
+    button.classList.toggle('daily-unrevealed', daily?.date !== localDay() || !daily.revealed);
+  }
 
   function resetReveal() {
     clearTimeout(revealTimer);
@@ -36,6 +43,9 @@ export function initializeDaily({ cards, getDeck, isBusy, refresh, persist }) {
       const id = navigator.locks
         ? await navigator.locks.request('charot-daily-card', claim) : claim();
       resetReveal();
+      openedDay = getDeck().daily.date;
+      openedId = id;
+      updateShine();
       reveal.disabled = true;
       stage.hidden = !id;
       const card = cards.find(card => card.id === id);
@@ -65,6 +75,10 @@ export function initializeDaily({ cards, getDeck, isBusy, refresh, persist }) {
     stage.classList.add('is-revealing');
     const finish = () => {
       stage.classList.add('is-revealed');
+      const deck = refresh();
+      deck.revealDaily(openedDay, openedId);
+      persist();
+      updateShine();
       message.textContent = 'Let the image speak to you.';
       dialog.querySelector('.daily-front').setAttribute('aria-hidden', 'false');
       dialog.querySelector('.daily-back').setAttribute('aria-hidden', 'true');
@@ -76,9 +90,11 @@ export function initializeDaily({ cards, getDeck, isBusy, refresh, persist }) {
 
   document.getElementById('daily-close').addEventListener('click', () => dialog.close());
   dialog.addEventListener('close', resetReveal);
+  updateShine();
   button.disabled = false;
   button.addEventListener('click', open);
   const prompt = () => {
+    updateShine();
     if (document.visibilityState === 'visible' && getDeck().daily?.date !== localDay()) open();
   };
   // Check again after midnight or when returning to a background tab.
